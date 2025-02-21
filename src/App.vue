@@ -1,47 +1,115 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue';
+
+const inputUrl = ref('');
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <h1>Bookmark AI</h1>
+  <div class="card">
+    <div class="card__title">
+      <h3>Add new bookmark</h3>
+      <p>Here you can save a new bookmark to you collection</p>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="card__content">
+      <label for="url">URL</label>
+      <div class="form-group">
+        <input type="text" id="url" placeholder="www.example.com" v-model="inputUrl" />
+        <button class="button button--small">Add</button>
+      </div>
+      <p class="form-explainer">Type or paste your url, then push the button or hit enter to check if it is valid</p>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<style scoped lang="scss">
+  h1 {
+    color: var(--color-heading);
+    margin-bottom: var(--base-padding);
+  }
+  .card {
+    padding: var(--base-padding);
+    width: 100%;
+    border-radius: var(--border-radius);
+    border: solid 1px var(--color-border);
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+    &__title {
+      
+      h3 {
+        font-size: 1.125rem;
+        line-height: 1.725rem;
+        font-weight: 500;
+        color: var(--color-heading);
+      }
 
-@media (min-width: 1024px) {
-  header {
+      padding-bottom: var(--base-padding);
+      margin-bottom: var(--base-padding);
+      border-bottom: solid 1px var(--color-border);
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .form-group {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+
+    input {
+      flex-grow: 1;
+      flex-shrink: 1;
+      margin-right: var(--base-padding);
+    }
+
+    button {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .form-explainer {
+    margin: 8px 0 0;
+    font-size: .8rem;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  input {
+    font-size: .875rem;
+    line-height: 1.25rem;
+    color: var(--color-heading);
+    padding: 4px 12px;
+    height: 2.25rem;
+    background-color: transparent;
+    border: solid 1px var(--color-border);
+    border-radius: var(--border-radius);
+
+    &::placeholder {
+      color: var(--color-text);
+    }
   }
-}
+
+  .button {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    border: solid 1px var(--color-button-background);
+    background-color: var(-color-button-background);
+    color: var(--color-button-text);
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+
+    &--small {
+      padding: 0 12px;
+      font-size: .75rem;
+      line-height: 1rem;
+    }
+  }
+
+  label {
+    margin-bottom: 8px;
+    font-size: .875rem;
+    font-weight: 500;
+    color: var(--color-heading);
+  }
 </style>
