@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Filter } from "lucide-vue-next"
+import { Filter, BookmarkPlus } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -23,16 +23,10 @@ import Themepicker from '@/components/ThemePicker.vue'
 <template>
   <Card>
     <CardHeader>
-      <CardTitle>Bookmark AI</CardTitle>
-      <CardDescription>AI-powered bookmark manager</CardDescription>
-    </CardHeader>
-    <CardContent>
       <div class="flex flex-row items-end">
         <div class="w-3/4">
-          <div className="flex w-full max-w-sm items-center space-x-2">
-            <Input type="search" placeholder="Search for boomark" />
-            <Button><Filter /> Filter</Button>
-          </div>
+          <CardTitle>Bookmark AI</CardTitle>
+          <CardDescription>AI-powered bookmark manager</CardDescription>
         </div>
         <div class="w-1/4 flex justify-end">
           <TooltipProvider>
@@ -55,6 +49,25 @@ import Themepicker from '@/components/ThemePicker.vue'
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+        </div>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div class="flex flex-row items-end">
+        <div class="w-3/4">
+          <div className="flex w-full max-w-sm items-center space-x-2">
+            <Input type="search" placeholder="Search for boomark" />
+            <Button>
+              <Filter />
+              Filter
+            </Button>
+          </div>
+        </div>
+        <div class="w-1/4 flex justify-end">
+          <Button>
+            Add Bookmark
+            <BookmarkPlus />
+          </Button>
         </div>
       </div>
       <div class="flex flex-row">
