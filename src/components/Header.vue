@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Settings from './Settings.vue';
-import ThemePicker from './ThemePicker.vue';
+import ThemePicker from './ThemeToggle.vue';
 
 </script>
 <template>

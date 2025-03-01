@@ -12,6 +12,15 @@ body {
   width: 100%;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+:root {
+  interpolate-size: allow-keywords;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
