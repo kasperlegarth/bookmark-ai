@@ -1,15 +1,24 @@
 import { defineStore } from 'pinia';
 import type { Bookmark } from '@/types/Bookmark';
+import bookmarksData from '@/data/bookmarks.json';
 
 export const useBookmarkStore = defineStore('bookmarkStore', {
   state: () => {
     const bookmarks = localStorage.getItem('bookmarks');
     return {
-      bookmarks: bookmarks ? JSON.parse(bookmarks) : [] as Bookmark[],
+      bookmarks: bookmarks ? JSON.parse(bookmarks) : (import.meta.env.MODE === 'development' ? bookmarksData : [] as Bookmark[]),
     };
   },
   getters: {
     getBookmarkById: (state) => (id: number) => state.bookmarks.find((bookmark: { id: number; }) => bookmark.id === id),
+    totalBookmarks: (state) => state.bookmarks.length,
+    allTags: (state) => {
+      const tags = new Set<string>();
+      state.bookmarks.forEach((bookmark: Bookmark) => {
+        bookmark.tags.forEach((tag: string) => tags.add(tag));
+      });
+      return tags;
+    }
   },
   actions: {
     addBookmark(bookmark: Bookmark) {

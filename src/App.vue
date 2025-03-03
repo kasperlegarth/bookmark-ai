@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Filter, BookmarkPlus } from "lucide-vue-next"
+// Imports
+import { Filter } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "./components/ui/textarea"
 import {
   Card,
   CardContent,
@@ -20,8 +20,6 @@ import {
 import {
   Pagination,
   PaginationEllipsis,
-  PaginationFirst,
-  PaginationLast,
   PaginationList,
   PaginationListItem,
   PaginationNext,
@@ -36,46 +34,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  Dialog,
-  DialogContent,
-  DialogClose,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import Settings from '@/components/Settings.vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import BookmarkList from '@/components/BookmarkList.vue'
+import BookmarkForm from '@/components/BookmarkForm.vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore';
+import { ref } from 'vue';
 
-import { ref, nextTick } from 'vue';
-
+// State and Variables
 const bookmarkStore = useBookmarkStore();
-
 const pageSize = ref(10);
 const currentPage = ref(1);
-
 const step = ref(1);
 const mode = ref<'add' | 'edit'>('add');
 const dialogOpen = ref(false);
 const editId = ref(0);
 const url = ref('');
-const siteName = ref('');;
+const siteName = ref('');
 const description = ref('');
 const tags = ref('');
 
+// Methods
 function addBookmark() {
   if(step.value === 1) {
     step.value = 2;
@@ -128,7 +107,6 @@ function editBookmark(bookmarkId: number) {
   step.value = 2;
   dialogOpen.value = true;
 }
-
 </script>
 
 <template>
@@ -175,97 +153,29 @@ function editBookmark(bookmarkId: number) {
           </div>
         </div>
         <div class="w-1/4 flex justify-end">
-          <Form v-slot="{ handleSubmit }" as="">
-            <Dialog v-model:open="dialogOpen">
-              <DialogTrigger>
-                <Button>
-                  Add Bookmark
-                  <BookmarkPlus />
-                </Button>
-              </DialogTrigger>
-              <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] px-0 max-h-[90dvh]">
-                <DialogHeader class="px-6">
-                  <DialogTitle><span v-if="mode == 'add'">Add</span><span v-if="mode == 'edit'">Update</span> Bookmark</DialogTitle>
-                  <DialogDescription>Fill in the details to add a new bookmark</DialogDescription>
-                </DialogHeader>
-                <form id="addForm" @submit="handleSubmit($event, addBookmark)" class="grid gap-4 py-4 px-6 overflow-y-auto">
-                  <FormField v-slot="{ componentField }" name="url">
-                    <FormItem>
-                      <FormLabel for="url">Site URL</FormLabel>
-                      <FormControl>
-                        <Input id="url" type="text" :defaultValue="url" v-model="url" placeholder="https://example.com" v-bind="componentField" />
-                      </FormControl>
-                      <FormDescription>
-                        Input the url you want to bookmark
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  </FormField>
-                  <div class="expand-reveal space-y-4" :class="{ expanded: step === 2 }">
-                    <FormField v-slot="{ componentField }" name="siteName">
-                      <FormItem>
-                        <FormLabel for="site">Site Name</FormLabel>
-                        <FormControl>
-                          <Input id="site" type="text" :defaultValue="siteName" v-model="siteName" placeholder="Site Name" v-bind="componentField" />
-                        </FormControl>
-                        <FormDescription>
-                          Input a name that helps you remember the site
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    </FormField>
-                    <FormField v-slot="{ componentField }" name="description">
-                      <FormItem>
-                        <FormLabel for="description">Description</FormLabel>
-                        <FormControl>
-                          <Textarea id="description" type="text" :defaultValue="description" v-model="description" placeholder="Description" v-bind="componentField" />
-                        </FormControl>
-                        <FormDescription>
-                          Input a description for the site
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    </FormField>
-                    <FormField v-slot="{ componentField }" name="tags">
-                      <FormItem>
-                        <FormLabel for="tags">Tags</FormLabel>
-                        <FormControl>
-                          <Input id="tags" type="text" :defaultValue="tags" v-model="tags" placeholder="Tags" v-bind="componentField" />
-                        </FormControl>
-                        <FormDescription>
-                          Input tags to help you categorize the site
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    </FormField>
-                  </div>
-                </form>
-                <DialogFooter class="px-6">
-                  <DialogClose as-child>
-                    <Button type="button" @click="resetForm" variant="outline">
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <Button type="submit" form="addForm">
-                    <template v-if="step === 1">Next</template>
-                    <template v-if="step === 2"><span v-if="mode == 'add'">Add</span><span v-if="mode == 'edit'">Update</span> Bookmark</template>
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </Form>
+          <BookmarkForm
+            :dialogOpen="dialogOpen"
+            :mode="mode"
+            :step="step"
+            :url="url"
+            :siteName="siteName"
+            :description="description"
+            :tags="tags"
+            :editId="editId"
+            @addBookmark="addBookmark"
+            @resetForm="resetForm"
+          />
         </div>
       </div>
-      <div class="flex flex-row mt-6">
+      <div v-if="bookmarkStore.totalBookmarks > 0" class="flex flex-row mt-6">
         <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="bookmarkStore.bookmarks" :page="currentPage" :pageSize="pageSize"
           @edit="editBookmark" />
       </div>
     </CardContent>
-    <CardFooter>
-      <Pagination v-slot="{ page }" :items-per-page="pageSize" :total="bookmarkStore.bookmarks.length">
+    <CardFooter v-if="bookmarkStore.totalBookmarks > 10">
+      <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges :total="bookmarkStore.totalBookmarks">
         <PaginationList v-slot="{ items }" class="flex item-center gap-1">
-          <PaginationFirst />
-          <PaginationPrev />
+          <PaginationPrev @click="currentPage = currentPage - 1" />
 
           <template v-for="(item, index) in items">
             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
@@ -276,8 +186,7 @@ function editBookmark(bookmarkId: number) {
             <PaginationEllipsis v-else :key="item.type" :index="index" />
           </template>
 
-          <PaginationNext />
-          <PaginationLast />
+          <PaginationNext @click="currentPage = currentPage + 1" />
         </PaginationList>
       </Pagination>
       <div class="flex justify-end ml-auto w-48 items-center">
@@ -289,10 +198,10 @@ function editBookmark(bookmarkId: number) {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Items per page</SelectLabel>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="25">25</SelectItem>
-              <SelectItem value="50">50</SelectItem>
-              <SelectItem value="100">100</SelectItem>
+              <SelectItem :value="10">10</SelectItem>
+              <SelectItem :value="25">25</SelectItem>
+              <SelectItem :value="50">50</SelectItem>
+              <SelectItem :value="100">100</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
