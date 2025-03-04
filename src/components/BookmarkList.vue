@@ -24,6 +24,7 @@ const props = defineProps<{
     rows: Bookmark[];
     page: number;
     pageSize: number;
+    searchQuery: string;
 }>();
 
 const paginatedRows = computed(() => {
@@ -31,6 +32,13 @@ const paginatedRows = computed(() => {
     const end = start + props.pageSize;
     return props.rows.slice(start, end);
 });
+
+function highlightText(text: string): string {
+    if (!props.searchQuery) return text;
+    const queries = props.searchQuery.split(/\s+/).map(q => q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const regex = new RegExp(`(${queries.join('|')})`, 'gi');
+    return text.replace(regex, '<strong>$1</strong>');
+}
 </script>
 
 <template>
@@ -42,8 +50,8 @@ const paginatedRows = computed(() => {
         </thead>
         <tbody>
             <tr v-for="row in paginatedRows" :key="row.id">
-                <td class="border-t px-4 py-2 max-w-xs"><a :href="row.url" target="_blank">{{ row.site }}</a></td>
-                <td class="border-t px-4 py-2 text-sm max-w-lg">{{ row.description }}</td>
+                <td class="border-t px-4 py-2 max-w-xs"><a :href="row.url" target="_blank" v-html="highlightText(row.site)"></a></td>
+                <td class="border-t px-4 py-2 text-sm max-w-lg" v-html="highlightText(row.description)"></td>
                 <td class="border-t px-4 py-2 max-w-xs">
                     <Badge v-for="tag in row.tags" :key="tag" variant="outline" class="m-1">{{ tag }}</Badge>
                 </td>

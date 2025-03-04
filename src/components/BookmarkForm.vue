@@ -7,13 +7,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList, ComboboxItemIndicator, ComboboxTrigger } from '@/components/ui/combobox'
+import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox'
+import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { Toaster } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/toast/use-toast'
 
 const { toast } = useToast()
 
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore'
 
 
@@ -44,7 +45,15 @@ const localEditId = ref(props.editId)
 const isValidUrl = ref(false)
 const isFetching = ref(false)
 const allTags = bookmarkStore.allTags;
-let urlValidationTimeout: ReturnType<typeof setTimeout> | null = null
+let urlValidationTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const tagsOpen = ref(false);
+const newTag = ref('');
+
+const filteredTags = computed(() => {
+  const options = allTags.filter(tag => !localTags.value.includes(tag));
+  return newTag.value ? options.filter(tag => tag.toLowerCase().includes(newTag.value.toLowerCase())) : options;
+});
 
 // Watchers
 watch(() => props.dialogOpen, (newVal) => {
@@ -85,7 +94,6 @@ async function validateUrl(url: string): Promise<boolean> {
   } catch (error) {
     console.log('error', error);
     isValidUrl.value = false;
-    console.log(toast)
     toast({
       title: 'Invalid URL',
       description: 'It looks like the URL you entered is invalid. Please enter a valid URL.',
@@ -192,36 +200,47 @@ async function addBookmark() {
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField name="tags">
+            <FormField v-slot="{ componentField }" name="tags">
               <FormItem>
                 <FormLabel for="tags">Tags</FormLabel>
                 <FormControl>
-                  <Combobox multiple v-model="localTags">
-                    <FormControl class="relative">
-                      <ComboboxAnchor as-child class="w-full">
-                        <div class="relative items-center">
-                          <ComboboxInput placeholder="Add tags..." />
-                          <ComboboxTrigger class="absolute end-0 inset-y-0 flex items-center justify-center px-3">
-                            <ChevronsUpDown class="size-4 text-muted-foreground" />
-                          </ComboboxTrigger>
+                  <Combobox v-model="localTags" v-model:open="tagsOpen" :ignore-filter="true">
+                    <ComboboxAnchor as-child>
+                      <TagsInput v-model="localTags" class="px-2 gap-2 w-full">
+                        <div class="flex gap-2 flex-wrap items-center">
+                          <TagsInputItem v-for="item in localTags" :key="item" :value="item">
+                            <TagsInputItemText />
+                            <TagsInputItemDelete />
+                          </TagsInputItem>
                         </div>
-                      </ComboboxAnchor>
-                    </FormControl>
-                    <ComboboxList align="start" body-lock class="dropdown-content-width-full">
-                      <ComboboxEmpty>
-                        No tags found
-                      </ComboboxEmpty>
 
-                      <ComboboxGroup class="overflow-y-auto max-h-[500px]">
-                        <ComboboxItem v-for="tag in allTags" :key="tag" :value="tag"
-                          @select="() => { localTags = [...localTags, tag]}">
-                          {{ tag }}
-                          <ComboboxItemIndicator>
-                            <Check />
-                          </ComboboxItemIndicator>
-                        </ComboboxItem>
-                      </ComboboxGroup>
-                    </ComboboxList>
+                        <ComboboxInput v-model="newTag" as-child v-bind="componentField">
+                          <TagsInputInput placeholder="Add tags..."
+                            class="min-w-[200px] w-full p-0 border-none shadow-none focus-visible:ring-0 h-auto"
+                            @keydown.enter.prevent />
+                        </ComboboxInput>
+                      </TagsInput>
+
+                      <ComboboxList class="w-[--reka-popper-anchor-width] max-h-[300px] overflow-y-auto">
+                        <ComboboxEmpty />
+                        <ComboboxGroup>
+                          <ComboboxItem v-for="tag in filteredTags" :key="tag"
+                            :value="tag" @select.prevent="(ev) => {
+
+                              if (typeof ev.detail.value === 'string') {
+                                newTag = ''
+                                localTags.push(ev.detail.value)
+                              }
+
+                              if (filteredTags.length === 0) {
+                                tagsOpen = false
+                              }
+                            }">
+                            {{ tag }}
+                          </ComboboxItem>
+                        </ComboboxGroup>
+                      </ComboboxList>
+                    </ComboboxAnchor>
                   </Combobox>
                 </FormControl>
                 <FormDescription>
@@ -229,7 +248,10 @@ async function addBookmark() {
                 </FormDescription>
                 <FormMessage />
                 <div class="flex flex-wrap gap-1">
-                  <Badge v-for="tag in localTags" :key="tag" variant="outline" class="flex item-center gap-2 cursor-pointer">{{ tag }} <X class=" w-3" /></Badge>
+                  <Badge v-for="tag in localTags" :key="tag" variant="outline"
+                    class="flex item-center gap-2 cursor-pointer">{{ tag }}
+                    <X class=" w-3" />
+                  </Badge>
                 </div>
               </FormItem>
             </FormField>

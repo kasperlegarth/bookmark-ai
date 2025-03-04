@@ -17,7 +17,7 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
       state.bookmarks.forEach((bookmark: Bookmark) => {
         bookmark.tags.forEach((tag: string) => tags.add(tag));
       });
-      return Array.from(tags);
+      return Array.from(tags).sort();
     }
   },
   actions: {

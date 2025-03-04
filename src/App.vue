@@ -39,7 +39,8 @@ import ThemeToggle from '@/components/ThemeToggle.vue'
 import BookmarkList from '@/components/BookmarkList.vue'
 import BookmarkForm from '@/components/BookmarkForm.vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import type { Bookmark } from "./types/Bookmark"
 
 // State and Variables
 const bookmarkStore = useBookmarkStore();
@@ -53,6 +54,7 @@ const url = ref('');
 const siteName = ref('');
 const description = ref('');
 const tags = ref<string[]>([]);
+const searchQuery = ref('');
 
 // Methods
 function addBookmark() {
@@ -107,6 +109,42 @@ function editBookmark(bookmarkId: number) {
   step.value = 2;
   dialogOpen.value = true;
 }
+
+const searchedBookmarks = computed(() => {
+  if (searchQuery.value === '') {
+    return bookmarkStore.bookmarks;
+  }
+
+  const query = searchQuery.value.toLowerCase();
+  const queryWords = query.split(' ');
+
+  return bookmarkStore.bookmarks
+    .map((bookmark: Bookmark) => {
+      let score = 0;
+
+      // Check for exact match
+      if (bookmark.site.toLowerCase().includes(query)) {
+        score += 10;
+      }
+
+      if (bookmark.description.toLowerCase().includes(query)) {
+        score += 5;
+      }
+
+      // Check for word matches
+      queryWords.forEach(word => {
+        const siteMatches = bookmark.site.toLowerCase().split(word).length - 1;
+        const descriptionMatches = bookmark.description.toLowerCase().split(word).length - 1;
+        score += siteMatches * 3;
+        score += descriptionMatches * 1;
+      });
+
+      return { ...bookmark, score };
+    })
+    .filter((bookmark: { score: number }) => bookmark.score > 0)
+    .sort((a: { score: number }, b: { score: number }) => b.score - a.score);
+});
+
 </script>
 
 <template>
@@ -145,7 +183,7 @@ function editBookmark(bookmarkId: number) {
       <div class="flex flex-row items-end mt-4">
         <div class="w-3/4">
           <div className="flex w-full max-w-sm items-center space-x-2">
-            <Input type="search" placeholder="Search for boomark" class="text-sm" />
+            <Input type="search" v-model="searchQuery" placeholder="Search for boomark" class="text-sm" />
             <Button class="text-sm">
               <Filter />
               Filter
@@ -167,13 +205,16 @@ function editBookmark(bookmarkId: number) {
           />
         </div>
       </div>
-      <div v-if="bookmarkStore.totalBookmarks > 0" class="flex flex-row mt-6">
-        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="bookmarkStore.bookmarks" :page="currentPage" :pageSize="pageSize"
+      <div v-if="searchedBookmarks.length > 0" class="flex flex-row mt-6">
+        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="searchedBookmarks" :page="currentPage" :pageSize="pageSize" :searchQuery="searchQuery"
           @edit="editBookmark" />
       </div>
+      <div v-else class="flex flex-col items-center text-center w-full">
+        <p class="text-lg text-muted-foreground">No bookmarks found</p>
+      </div>
     </CardContent>
-    <CardFooter v-if="bookmarkStore.totalBookmarks > 10">
-      <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges :total="bookmarkStore.totalBookmarks">
+    <CardFooter v-if="searchedBookmarks.length > 10">
+      <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges :total="searchedBookmarks.length">
         <PaginationList v-slot="{ items }" class="flex item-center gap-1">
           <PaginationPrev @click="currentPage = currentPage - 1" />
 

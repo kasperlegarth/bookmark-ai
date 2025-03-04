@@ -4,4 +4,5 @@ export interface Bookmark {
     site: string;
     description: string;
     tags: string[];
+    score?: number; 
 }
