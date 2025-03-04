@@ -52,7 +52,7 @@ const editId = ref(0);
 const url = ref('');
 const siteName = ref('');
 const description = ref('');
-const tags = ref('');
+const tags = ref<string[]>([]);
 
 // Methods
 function addBookmark() {
@@ -64,7 +64,7 @@ function addBookmark() {
         url: url.value,
         site: siteName.value,
         description: description.value,
-        tags: tags.value.split(',').map(tag => tag.trim()), 
+        tags: tags.value,
       });
     } else {
       bookmarkStore.addBookmark({
@@ -72,7 +72,7 @@ function addBookmark() {
         url: url.value,
         site: siteName.value,
         description: description.value,
-        tags: tags.value.split(',').map(tag => tag.trim()), 
+        tags: tags.value, 
       });
     }
     step.value = 1;
@@ -86,7 +86,7 @@ function resetForm() {
   url.value = '';
   siteName.value = '';
   description.value = '';
-  tags.value = '';
+  tags.value = [];
   step.value = 1;
   mode.value = 'add';
 }
