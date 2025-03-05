@@ -1,15 +1,13 @@
 <script setup lang="ts">
 // Imports
-import { BookmarkPlus, Check, ChevronsUpDown, X } from "lucide-vue-next"
+import { BookmarkPlus, Check } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox'
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
-import { Toaster } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/toast/use-toast'
 
 const { toast } = useToast()
@@ -51,8 +49,8 @@ const tagsOpen = ref(false);
 const newTag = ref('');
 
 const filteredTags = computed(() => {
-  const options = allTags.filter(tag => !localTags.value.includes(tag));
-  return newTag.value ? options.filter(tag => tag.toLowerCase().includes(newTag.value.toLowerCase())) : options;
+  const options = allTags.filter(tag => !localTags.value.includes(tag.label));
+  return newTag.value ? options.filter(tag => tag.label.toLowerCase().includes(newTag.value.toLowerCase())) : options;
 });
 
 // Watchers
@@ -132,6 +130,7 @@ async function addBookmark() {
         site: localSiteName.value,
         description: localDescription.value,
         tags: localTags.value,
+        date: new Date().toISOString().split('T')[0]
       })
     }
     localStep.value = 1
@@ -224,7 +223,7 @@ async function addBookmark() {
                       <ComboboxList class="w-[--reka-popper-anchor-width] max-h-[300px] overflow-y-auto">
                         <ComboboxEmpty />
                         <ComboboxGroup>
-                          <ComboboxItem v-for="tag in filteredTags" :key="tag"
+                          <ComboboxItem v-for="tag in filteredTags" :key="tag.label"
                             :value="tag" @select.prevent="(ev) => {
 
                               if (typeof ev.detail.value === 'string') {
@@ -236,7 +235,7 @@ async function addBookmark() {
                                 tagsOpen = false
                               }
                             }">
-                            {{ tag }}
+                            {{ tag.label }}
                           </ComboboxItem>
                         </ComboboxGroup>
                       </ComboboxList>
@@ -247,12 +246,6 @@ async function addBookmark() {
                   Input tags to help you categorize the site
                 </FormDescription>
                 <FormMessage />
-                <div class="flex flex-wrap gap-1">
-                  <Badge v-for="tag in localTags" :key="tag" variant="outline"
-                    class="flex item-center gap-2 cursor-pointer">{{ tag }}
-                    <X class=" w-3" />
-                  </Badge>
-                </div>
               </FormItem>
             </FormField>
           </div>
@@ -272,7 +265,6 @@ async function addBookmark() {
       </DialogContent>
     </Dialog>
   </Form>
-  <Toaster />
 </template>
 
 <style lang="scss">

@@ -4,629 +4,719 @@
     "url": "https://www.deck.gallery/",
     "site": "Deck.Gallery® — Beautifully designed decks, curated",
     "description": "A source of inspiration for beautifully designed presentations. This platform showcases a curated selection of pitch decks, keynotes, and reports with high-quality aesthetics and strong storytelling. Whether you're looking for visual inspiration, design showcase, or creative ideas, this gallery helps you explore the latest trends in UI/UX and presentation design. Perfect for designers, marketers, and anyone who values impactful visuals.",
-    "tags": ["Design Showcase", "Web Aesthetics", "Creative Ideas", "Presentation Design", "Trendy UI"]
+    "tags": ["Design Showcase", "Web Aesthetics", "Creative Ideas", "Presentation Design", "Trendy UI"],
+    "date": "2023-03-15"
   },
   {
     "id": 2,
     "url": "https://www.smashingmagazine.com/",
     "site": "Smashing Magazine — For Web Designers and Developers",
     "description": "A go-to resource for web designers and developers, featuring articles on UI/UX, frontend technologies, and best practices.",
-    "tags": ["Web Design", "Frontend", "UI/UX", "Development", "Best Practices"]
+    "tags": ["Web Design", "Frontend", "UI/UX", "Development", "Best Practices"],
+    "date": "2023-05-22"
   },
   {
     "id": 3,
     "url": "https://www.theverge.com/",
     "site": "The Verge — Technology News and Reviews",
     "description": "Stay updated with the latest in technology, gadgets, and internet culture. The Verge covers everything from AI advancements to gaming trends.",
-    "tags": ["Tech News", "Gadgets", "AI", "Gaming", "Internet Culture"]
+    "tags": ["Tech News", "Gadgets", "AI", "Gaming", "Internet Culture"],
+    "date": "2023-07-10"
   },
   {
     "id": 4,
     "url": "https://www.hackernoon.com/",
     "site": "HackerNoon — How Hackers Start Their Afternoons",
     "description": "A community-driven platform with insightful stories and tutorials on programming, cybersecurity, and startup culture.",
-    "tags": ["Programming", "Cybersecurity", "Startups", "Development", "Tech Culture"]
+    "tags": ["Programming", "Cybersecurity", "Startups", "Development", "Tech Culture"],
+    "date": "2023-02-05"
   },
   {
     "id": 5,
     "url": "https://www.producthunt.com/",
     "site": "Product Hunt — Discover the Best New Products",
     "description": "A platform to discover and discuss the latest tech products, apps, and innovations in the startup ecosystem.",
-    "tags": ["Startups", "Product Discovery", "Tech Innovation", "Entrepreneurship", "Apps"]
+    "tags": ["Startups", "Product Discovery", "Tech Innovation", "Entrepreneurship", "Apps"],
+    "date": "2023-08-19"
   },
   {
     "id": 6,
     "url": "https://www.nba.com/",
     "site": "NBA — Official Site of the National Basketball Association",
     "description": "Get the latest scores, news, and highlights from the NBA, including in-depth player stats and game analysis.",
-    "tags": ["Sports", "Basketball", "NBA", "Game Highlights", "Player Stats"]
+    "tags": ["Sports", "Basketball", "NBA", "Game Highlights", "Player Stats"],
+    "date": "2023-01-25"
   },
   {
     "id": 7,
     "url": "https://www.allrecipes.com/",
     "site": "AllRecipes — Recipes, Cooking Tips, and Meal Ideas",
     "description": "Find thousands of delicious recipes, cooking tips, and meal inspiration for any occasion.",
-    "tags": ["Cooking", "Recipes", "Food", "Meal Ideas", "Home Cooking"]
+    "tags": ["Cooking", "Recipes", "Food", "Meal Ideas", "Home Cooking"],
+    "date": "2023-06-30"
   },
   {
     "id": 8,
     "url": "https://www.twitch.tv/",
     "site": "Twitch — Live Streaming for Gamers and Creators",
     "description": "Watch and stream live gameplay, esports tournaments, and creative content from streamers around the world.",
-    "tags": ["Gaming", "Streaming", "Esports", "Live Content", "Entertainment"]
+    "tags": ["Gaming", "Streaming", "Esports", "Live Content", "Entertainment"],
+    "date": "2023-04-12"
   },
   {
     "id": 9,
     "url": "https://www.arxiv.org/",
     "site": "arXiv — Open Access Scientific Research",
     "description": "A free distribution service for research papers in physics, computer science, mathematics, and more.",
-    "tags": ["Science", "Research", "Machine Learning", "AI", "Mathematics"]
+    "tags": ["Science", "Research", "Machine Learning", "AI", "Mathematics"],
+    "date": "2023-09-05"
   },
   {
     "id": 10,
     "url": "https://www.behance.net/",
     "site": "Behance — Showcase and Discover Creative Work",
     "description": "A platform for creatives to showcase their work in graphic design, photography, illustration, and more.",
-    "tags": ["Design", "Creative", "Illustration", "Photography", "Portfolio"]
+    "tags": ["Design", "Creative", "Illustration", "Photography", "Portfolio"],
+    "date": "2023-11-01"
   },
   {
     "id": 11,
     "url": "https://www.reddit.com/r/programming/",
     "site": "Reddit — r/programming",
     "description": "A community for programmers to discuss coding, share resources, and stay updated on industry trends.",
-    "tags": ["Programming", "Software Development", "Coding", "Tech Community", "Resources"]
+    "tags": ["Programming", "Software Development", "Coding", "Tech Community", "Resources"],
+    "date": "2023-10-15"
   },
   {
     "id": 12,
     "url": "https://www.css-tricks.com/",
     "site": "CSS-Tricks — Tips, Tricks, and Techniques on Using CSS",
     "description": "A comprehensive resource for web developers focused on CSS techniques, layouts, and modern styling practices.",
-    "tags": ["CSS", "Web Development", "Frontend", "Styling", "Design"]
+    "tags": ["CSS", "Web Development", "Frontend", "Styling", "Design"],
+    "date": "2023-03-22"
   },
   {
     "id": 13,
     "url": "https://www.dev.to/",
     "site": "DEV Community — A Place for Developers",
     "description": "An online community where developers share articles, discuss trends, and collaborate on coding projects.",
-    "tags": ["Development", "Programming", "Tech Community", "Open Source", "Coding"]
+    "tags": ["Development", "Programming", "Tech Community", "Open Source", "Coding"],
+    "date": "2023-05-18"
   },
   {
     "id": 14,
     "url": "https://www.medium.com/tag/technology",
     "site": "Medium — Technology Articles & Insights",
     "description": "A collection of in-depth articles, opinions, and guides on the latest in technology, software, and innovation.",
-    "tags": ["Technology", "Software", "AI", "Tech News", "Innovation"]
+    "tags": ["Technology", "Software", "AI", "Tech News", "Innovation"],
+    "date": "2023-07-25"
   },
   {
     "id": 15,
     "url": "https://www.figma.com/community",
     "site": "Figma Community — Design Resources & Plugins",
     "description": "A hub for Figma users to discover and share UI kits, design templates, and productivity-enhancing plugins.",
-    "tags": ["Design", "UI/UX", "Figma", "Prototyping", "Plugins"]
+    "tags": ["Design", "UI/UX", "Figma", "Prototyping", "Plugins"],
+    "date": "2023-02-28"
   },
   {
     "id": 16,
     "url": "https://www.codepen.io/",
     "site": "CodePen — Frontend Development Playground",
     "description": "An interactive platform for testing and showcasing HTML, CSS, and JavaScript code snippets.",
-    "tags": ["Frontend", "Coding", "JavaScript", "Web Development", "Experiments"]
+    "tags": ["Frontend", "Coding", "JavaScript", "Web Development", "Experiments"],
+    "date": "2023-08-03"
   },
   {
     "id": 17,
     "url": "https://www.wired.com/",
     "site": "WIRED — Future Science, Culture & Technology News",
     "description": "A leading source for in-depth articles on tech culture, gadgets, AI, and future innovations.",
-    "tags": ["Tech News", "Science", "Innovation", "Gadgets", "Culture"]
+    "tags": ["Tech News", "Science", "Innovation", "Gadgets", "Culture"],
+    "date": "2023-06-14"
   },
   {
     "id": 18,
     "url": "https://www.indiehackers.com/",
     "site": "Indie Hackers — Learn from Solopreneurs",
     "description": "A platform for entrepreneurs to share success stories, strategies, and challenges in building online businesses.",
-    "tags": ["Entrepreneurship", "Startups", "Business", "Indie Makers", "Growth"]
+    "tags": ["Entrepreneurship", "Startups", "Business", "Indie Makers", "Growth"],
+    "date": "2023-09-20"
   },
   {
     "id": 19,
     "url": "https://www.ycombinator.com/library",
     "site": "Y Combinator Library — Startup Advice & Guides",
     "description": "A curated library of startup advice, case studies, and best practices from successful founders and investors.",
-    "tags": ["Startups", "Venture Capital", "Business Strategy", "Tech", "Entrepreneurship"]
+    "tags": ["Startups", "Venture Capital", "Business Strategy", "Tech", "Entrepreneurship"],
+    "date": "2023-04-07"
   },
   {
     "id": 20,
     "url": "https://www.khanacademy.org/",
     "site": "Khan Academy — Free Educational Resources",
     "description": "A free platform offering courses in math, coding, science, and more, perfect for students and lifelong learners.",
-    "tags": ["Education", "Learning", "Online Courses", "Science", "Coding"]
+    "tags": ["Education", "Learning", "Online Courses", "Science", "Coding"],
+    "date": "2023-11-10"
   },
   {
     "id": 21,
     "url": "https://www.coursera.org/",
     "site": "Coursera — Online Courses from Top Universities",
     "description": "A learning platform offering courses and certifications in various fields, including technology, AI, and business.",
-    "tags": ["Online Learning", "Courses", "Technology", "AI", "Business"]
+    "tags": ["Online Learning", "Courses", "Technology", "AI", "Business"],
+    "date": "2023-01-12"
   },
   {
     "id": 22,
     "url": "https://www.stackoverflow.com/",
     "site": "Stack Overflow — Where Developers Learn, Share, & Build Careers",
     "description": "A question-and-answer platform where developers can ask coding questions, find solutions, and contribute knowledge to the community.",
-    "tags": ["Programming", "Coding", "Development", "Tech Community", "Problem Solving"]
+    "tags": ["Programming", "Coding", "Development", "Tech Community", "Problem Solving"],
+    "date": "2023-10-02"
   },
   {
     "id": 23,
     "url": "https://www.gitHub.com/",
     "site": "GitHub — Build Software Better, Together",
     "description": "A code hosting platform for version control and collaboration, allowing developers to contribute to open-source projects.",
-    "tags": ["Version Control", "Open Source", "Development", "Coding", "Collaboration"]
+    "tags": ["Version Control", "Open Source", "Development", "Coding", "Collaboration"],
+    "date": "2023-03-29"
   },
   {
     "id": 24,
     "url": "https://www.leetcode.com/",
     "site": "LeetCode — Improve Coding Skills & Prepare for Interviews",
     "description": "A coding platform with programming challenges to help developers improve problem-solving skills and prepare for technical interviews.",
-    "tags": ["Coding Challenges", "Algorithms", "Data Structures", "Programming", "Interview Preparation"]
+    "tags": ["Coding Challenges", "Algorithms", "Data Structures", "Programming", "Interview Preparation"],
+    "date": "2023-05-11"
   },
   {
     "id": 25,
     "url": "https://www.dribbble.com/",
     "site": "Dribbble — Where Creatives Share & Discover Design Work",
     "description": "A platform for designers to showcase their work, gain inspiration, and connect with other creative professionals.",
-    "tags": ["Design", "UI/UX", "Creativity", "Inspiration", "Graphic Design"]
+    "tags": ["Design", "UI/UX", "Creativity", "Inspiration", "Graphic Design"],
+    "date": "2023-07-01"
   },
   {
     "id": 26,
     "url": "https://www.notion.so/",
     "site": "Notion — Organize Your Life & Work",
     "description": "A versatile productivity tool that combines note-taking, task management, and collaboration in one workspace.",
-    "tags": ["Productivity", "Note-Taking", "Task Management", "Collaboration", "Organization"]
+    "tags": ["Productivity", "Note-Taking", "Task Management", "Collaboration", "Organization"],
+    "date": "2023-09-13"
   },
   {
     "id": 27,
     "url": "https://www.ted.com/talks",
     "site": "TED Talks — Ideas Worth Spreading",
     "description": "A collection of inspiring talks from experts in various fields, covering topics such as technology, innovation, and creativity.",
-    "tags": ["Inspiration", "Education", "Technology", "Innovation", "Ideas"]
+    "tags": ["Inspiration", "Education", "Technology", "Innovation", "Ideas"],
+    "date": "2023-02-17"
   },
   {
     "id": 28,
     "url": "https://www.replit.com/",
     "site": "Replit — Online IDE for Coding in Any Language",
     "description": "A cloud-based coding environment that allows developers to write, run, and collaborate on code in various programming languages.",
-    "tags": ["Coding", "Development", "Cloud IDE", "Programming", "Collaboration"]
+    "tags": ["Coding", "Development", "Cloud IDE", "Programming", "Collaboration"],
+    "date": "2023-06-25"
   },
   {
     "id": 29,
     "url": "https://www.fonts.google.com/",
     "site": "Google Fonts — Free Fonts for Designers & Developers",
     "description": "A collection of free, open-source fonts that can be used for web and graphic design projects.",
-    "tags": ["Typography", "Fonts", "Web Design", "Graphic Design", "UI/UX"]
+    "tags": ["Typography", "Fonts", "Web Design", "Graphic Design", "UI/UX"],
+    "date": "2023-08-08"
   },
   {
     "id": 30,
     "url": "https://www.caniuse.com/",
     "site": "Can I Use — Browser Compatibility Checker",
     "description": "A tool for web developers to check browser support for HTML, CSS, and JavaScript features.",
-    "tags": ["Web Development", "Browser Compatibility", "HTML", "CSS", "JavaScript"]
+    "tags": ["Web Development", "Browser Compatibility", "HTML", "CSS", "JavaScript"],
+    "date": "2023-04-20"
   },
   {
     "id": 31,
     "url": "https://www.polygon.com/",
     "site": "Polygon — Gaming News, Reviews, and Features",
     "description": "A gaming media website covering the latest news, reviews, and in-depth articles on video games and gaming culture.",
-    "tags": ["Gaming", "Game Reviews", "Esports", "Tech", "Entertainment"]
+    "tags": ["Gaming", "Game Reviews", "Esports", "Tech", "Entertainment"],
+    "date": "2023-11-05"
   },
   {
     "id": 32,
     "url": "https://www.w3schools.com/",
     "site": "W3Schools — Learn Web Development",
     "description": "An educational platform offering tutorials and references on HTML, CSS, JavaScript, and various programming languages.",
-    "tags": ["Web Development", "Programming", "HTML", "CSS", "JavaScript"]
+    "tags": ["Web Development", "Programming", "HTML", "CSS", "JavaScript"],
+    "date": "2023-01-30"
   },
   {
     "id": 33,
     "url": "https://www.udemy.com/",
     "site": "Udemy — Online Courses for Personal & Professional Growth",
     "description": "An e-learning platform offering a wide range of courses in programming, business, design, and personal development.",
-    "tags": ["Online Learning", "Education", "Programming", "Design", "Business"]
+    "tags": ["Online Learning", "Education", "Programming", "Design", "Business"],
+    "date": "2023-10-22"
   },
   {
     "id": 34,
     "url": "https://www.humblebundle.com/",
     "site": "Humble Bundle — Games, Books, and Software Deals",
     "description": "A platform offering discounted bundles of games, eBooks, and software while supporting charity.",
-    "tags": ["Gaming", "Software", "Books", "Deals", "Charity"]
+    "tags": ["Gaming", "Software", "Books", "Deals", "Charity"],
+    "date": "2023-03-03"
   },
   {
     "id": 35,
     "url": "https://www.framer.com/",
     "site": "Framer — Interactive Design & Prototyping",
     "description": "A powerful design tool for creating high-fidelity interactive UI/UX prototypes with code-based capabilities.",
-    "tags": ["Design", "Prototyping", "UI/UX", "Web Development", "Animation"]
+    "tags": ["Design", "Prototyping", "UI/UX", "Web Development", "Animation"],
+    "date": "2023-05-27"
   },
   {
     "id": 36,
     "url": "https://www.web.dev/",
     "site": "web.dev — Modern Web Development Best Practices",
     "description": "A Google-backed platform offering web performance insights, accessibility guides, and best practices for modern web development.",
-    "tags": ["Web Development", "Performance", "Accessibility", "SEO", "Best Practices"]
+    "tags": ["Web Development", "Performance", "Accessibility", "SEO", "Best Practices"],
+    "date": "2023-07-18"
   },
   {
     "id": 37,
     "url": "https://www.patreon.com/",
     "site": "Patreon — Support & Connect with Creators",
     "description": "A platform that allows creators to earn money through subscriptions and direct support from fans.",
-    "tags": ["Content Creation", "Crowdfunding", "Membership", "Artists", "Creators"]
+    "tags": ["Content Creation", "Crowdfunding", "Membership", "Artists", "Creators"],
+    "date": "2023-09-28"
   },
   {
     "id": 38,
     "url": "https://www.lottiefiles.com/",
     "site": "LottieFiles — Free Animations for Web & Apps",
     "description": "A platform providing free and premium Lottie animations for web and mobile app design.",
-    "tags": ["Animations", "Web Design", "UI/UX", "Motion Design", "Graphics"]
+    "tags": ["Animations", "Web Design", "UI/UX", "Motion Design", "Graphics"],
+    "date": "2023-02-10"
   },
   {
     "id": 39,
     "url": "https://www.soundcloud.com/",
     "site": "SoundCloud — Discover & Share Music",
     "description": "A platform for musicians and creators to upload, share, and discover music and podcasts.",
-    "tags": ["Music", "Streaming", "Podcasts", "Artists", "Audio"]
+    "tags": ["Music", "Streaming", "Podcasts", "Artists", "Audio"],
+    "date": "2023-06-05"
   },
   {
     "id": 40,
     "url": "https://www.behindthename.com/",
     "site": "Behind the Name — Meaning & History of Names",
     "description": "A database of name origins, meanings, and historical significance, great for writers and researchers.",
-    "tags": ["Writing", "Research", "Names", "History", "Etymology"]
+    "tags": ["Writing", "Research", "Names", "History", "Etymology"],
+    "date": "2023-08-29"
   },
   {
     "id": 41,
     "url": "https://www.boardgamegeek.com/",
     "site": "BoardGameGeek — The Ultimate Board Game Database",
     "description": "A comprehensive database of board games, including reviews, ratings, and community discussions.",
-    "tags": ["Board Games", "Gaming", "Community", "Reviews", "Strategy"]
+    "tags": ["Board Games", "Gaming", "Community", "Reviews", "Strategy"],
+    "date": "2023-04-25"
   },
   {
     "id": 42,
     "url": "https://www.hackernews.ycombinator.com/",
     "site": "Hacker News — Tech & Startup News Aggregator",
     "description": "A social news site focused on tech, startups, and programming, run by Y Combinator.",
-    "tags": ["Tech News", "Startups", "Programming", "Entrepreneurship", "Community"]
+    "tags": ["Tech News", "Startups", "Programming", "Entrepreneurship", "Community"],
+    "date": "2023-11-12"
   },
   {
     "id": 43,
     "url": "https://www.notionery.com/",
     "site": "Notionery — Best Notion Templates & Resources",
     "description": "A curated marketplace of Notion templates to enhance productivity, project management, and note-taking.",
-    "tags": ["Productivity", "Notion", "Templates", "Organization", "Task Management"]
+    "tags": ["Productivity", "Notion", "Templates", "Organization", "Task Management"],
+    "date": "2023-01-18"
   },
   {
     "id": 44,
     "url": "https://www.refactoring.guru/",
     "site": "Refactoring Guru — Design Patterns & Code Smells",
     "description": "A comprehensive guide on software design patterns, refactoring techniques, and clean coding practices.",
-    "tags": ["Programming", "Software Design", "Code Quality", "Refactoring", "Best Practices"]
+    "tags": ["Programming", "Software Design", "Code Quality", "Refactoring", "Best Practices"],
+    "date": "2023-03-08"
   },
   {
     "id": 45,
     "url": "https://www.freecodecamp.org/",
     "site": "freeCodeCamp — Learn to Code for Free",
     "description": "An open-source platform offering coding tutorials, challenges, and certifications in web development and programming.",
-    "tags": ["Coding", "Web Development", "Education", "Programming", "Learning"]
+    "tags": ["Coding", "Web Development", "Education", "Programming", "Learning"],
+    "date": "2023-05-14"
   },
   {
     "id": 46,
     "url": "https://www.kickstarter.com/",
     "site": "Kickstarter — Crowdfunding Creative Projects",
     "description": "A crowdfunding platform for creative projects, helping entrepreneurs and artists bring ideas to life with community support.",
-    "tags": ["Crowdfunding", "Entrepreneurship", "Innovation", "Startups", "Creative Projects"]
+    "tags": ["Crowdfunding", "Entrepreneurship", "Innovation", "Startups", "Creative Projects"],
+    "date": "2023-07-22"
   },
   {
     "id": 47,
     "url": "https://www.paperswithcode.com/",
     "site": "Papers with Code — Machine Learning Research & Code",
     "description": "A platform that connects research papers with their implementation code in machine learning and AI.",
-    "tags": ["Machine Learning", "AI", "Research", "Coding", "Open Source"]
+    "tags": ["Machine Learning", "AI", "Research", "Coding", "Open Source"],
+    "date": "2023-09-01"
   },
   {
     "id": 48,
     "url": "https://www.exercism.io/",
     "site": "Exercism — Coding Challenges & Mentorship",
     "description": "An interactive coding platform offering challenges, mentorship, and exercises in multiple programming languages.",
-    "tags": ["Coding Challenges", "Programming", "Learning", "Mentorship", "Development"]
+    "tags": ["Coding Challenges", "Programming", "Learning", "Mentorship", "Development"],
+    "date": "2023-04-15"
   },
   {
     "id": 49,
     "url": "https://www.are.na/",
     "site": "Are.na — Visual & Research Collaboration Tool",
     "description": "A creative research platform for collecting, organizing, and sharing digital content in a structured way.",
-    "tags": ["Research", "Creativity", "Organization", "Inspiration", "Visual Curation"]
+    "tags": ["Research", "Creativity", "Organization", "Inspiration", "Visual Curation"],
+    "date": "2023-06-19"
   },
   {
     "id": 50,
     "url": "https://www.uxdesign.cc/",
     "site": "UX Collective — User Experience Design Insights",
     "description": "A platform with insightful articles and case studies on UX/UI design, usability, and accessibility.",
-    "tags": ["UX", "UI", "Design", "Accessibility", "Usability"]
+    "tags": ["UX", "UI", "Design", "Accessibility", "Usability"],
+    "date": "2023-08-24"
   },
   {
     "id": 51,
     "url": "https://www.fontpair.co/",
     "site": "FontPair — Google Font Combinations",
     "description": "A tool for designers to explore and test Google font pairings for typography projects.",
-    "tags": ["Typography", "Design", "Fonts", "UI/UX", "Graphic Design"]
+    "tags": ["Typography", "Design", "Fonts", "UI/UX", "Graphic Design"],
+    "date": "2023-02-22"
   },
   {
     "id": 52,
     "url": "https://www.openai.com/research/",
     "site": "OpenAI Research — Advancing AI",
     "description": "A hub for AI research and development, featuring publications, breakthroughs, and innovations in artificial intelligence.",
-    "tags": ["AI", "Machine Learning", "Research", "Technology", "Innovation"]
+    "tags": ["AI", "Machine Learning", "Research", "Technology", "Innovation"],
+    "date": "2023-10-07"
   },
   {
     "id": 53,
     "url": "https://www.webflow.com/",
     "site": "Webflow — No-Code Website Builder",
     "description": "A powerful no-code website builder that enables designers to create custom, responsive websites visually.",
-    "tags": ["Web Design", "No-Code", "Development", "UI/UX", "CMS"]
+    "tags": ["Web Design", "No-Code", "Development", "UI/UX", "CMS"],
+    "date": "2023-03-12"
   },
   {
     "id": 54,
     "url": "https://www.cooking.nytimes.com/",
     "site": "NYT Cooking — Recipes & Culinary Inspiration",
     "description": "A vast collection of curated recipes, cooking guides, and food inspiration from top chefs and food writers.",
-    "tags": ["Cooking", "Recipes", "Food", "Culinary", "Gourmet"]
+    "tags": ["Cooking", "Recipes", "Food", "Culinary", "Gourmet"],
+    "date": "2023-05-30"
   },
   {
     "id": 55,
     "url": "https://www.p5js.org/",
     "site": "p5.js — Creative Coding for Artists",
     "description": "A JavaScript library that makes coding accessible for artists, designers, educators, and beginners.",
-    "tags": ["Creative Coding", "JavaScript", "Design", "Art", "Generative"]
+    "tags": ["Creative Coding", "JavaScript", "Design", "Art", "Generative"],
+    "date": "2023-07-05"
   },
   {
     "id": 56,
     "url": "https://www.nngroup.com/",
     "site": "Nielsen Norman Group — UX Research & Guidelines",
     "description": "A leading authority on usability, offering research-backed articles and best practices for UX design.",
-    "tags": ["UX", "Usability", "Design", "Research", "User Experience"]
+    "tags": ["UX", "Usability", "Design", "Research", "User Experience"],
+    "date": "2023-09-17"
   },
   {
     "id": 57,
     "url": "https://www.gumroad.com/",
     "site": "Gumroad — Sell Digital Products",
     "description": "A platform for creators to sell digital products, courses, and memberships directly to their audience.",
-    "tags": ["E-commerce", "Digital Products", "Entrepreneurship", "Creators", "Online Business"]
+    "tags": ["E-commerce", "Digital Products", "Entrepreneurship", "Creators", "Online Business"],
+    "date": "2023-11-20"
   },
   {
     "id": 58,
     "url": "https://www.typography.com/",
     "site": "Typography.com — Fonts & Type Design",
     "description": "A font foundry providing high-quality, professional fonts for design projects.",
-    "tags": ["Typography", "Fonts", "Design", "Branding", "Graphic Design"]
+    "tags": ["Typography", "Fonts", "Design", "Branding", "Graphic Design"],
+    "date": "2023-01-05"
   },
   {
     "id": 59,
     "url": "https://www.codecademy.com/",
     "site": "Codecademy — Learn to Code",
     "description": "An interactive platform that teaches programming languages through hands-on coding exercises.",
-    "tags": ["Programming", "Coding", "Education", "Development", "Interactive Learning"]
+    "tags": ["Programming", "Coding", "Education", "Development", "Interactive Learning"],
+    "date": "2023-06-09"
   },
   {
     "id": 60,
     "url": "https://www.themem.co/",
     "site": "Themem — Free & Premium Website Templates",
     "description": "A collection of high-quality website templates for startups, blogs, and businesses.",
-    "tags": ["Web Design", "Templates", "UI/UX", "Front-end", "Themes"]
+    "tags": ["Web Design", "Templates", "UI/UX", "Front-end", "Themes"],
+    "date": "2023-08-14"
   },
   {
     "id": 61,
     "url": "https://www.reddit.com/r/SideProject/",
     "site": "Reddit — Side Projects Community",
     "description": "A community where developers and entrepreneurs share and discuss their side projects.",
-    "tags": ["Startups", "Side Projects", "Development", "Entrepreneurship", "Networking"]
+    "tags": ["Startups", "Side Projects", "Development", "Entrepreneurship", "Networking"],
+    "date": "2023-02-12"
   },
   {
     "id": 62,
     "url": "https://www.drifttime.media/",
     "site": "Drifttime — Interactive Digital Storytelling",
     "description": "A creative agency specializing in interactive storytelling and web-based digital experiences.",
-    "tags": ["Storytelling", "Web Design", "Interactive", "Creativity", "Digital Media"]
+    "tags": ["Storytelling", "Web Design", "Interactive", "Creativity", "Digital Media"],
+    "date": "2023-04-27"
   },
   {
     "id": 63,
     "url": "https://www.gitconnected.com/",
     "site": "GitConnected — Developer Community & Learning",
     "description": "A platform offering curated learning paths, coding tutorials, and career insights for developers.",
-    "tags": ["Programming", "Development", "Learning", "Career", "Software Engineering"]
+    "tags": ["Programming", "Development", "Learning", "Career", "Software Engineering"],
+    "date": "2023-06-22"
   },
   {
     "id": 64,
     "url": "https://www.super.so/",
     "site": "Super — Turn Notion Pages into Websites",
     "description": "A tool that converts Notion pages into fast, customizable websites with no coding required.",
-    "tags": ["No-Code", "Web Development", "Notion", "CMS", "Website Builder"]
+    "tags": ["No-Code", "Web Development", "Notion", "CMS", "Website Builder"],
+    "date": "2023-08-26"
   },
   {
     "id": 65,
     "url": "https://www.vectornator.io/",
     "site": "Vectornator — Free Vector Graphic Software",
     "description": "A powerful vector graphic design tool for digital illustration and UI/UX design.",
-    "tags": ["Graphic Design", "Illustration", "Vector Graphics", "UI/UX", "Creativity"]
+    "tags": ["Graphic Design", "Illustration", "Vector Graphics", "UI/UX", "Creativity"],
+    "date": "2023-03-18"
   },
   {
     "id": 66,
     "url": "https://www.gitkraken.com/",
     "site": "GitKraken — Visual Git Client",
     "description": "A powerful and user-friendly Git client for managing repositories visually.",
-    "tags": ["Git", "Version Control", "Development", "Coding", "Collaboration"]
+    "tags": ["Git", "Version Control", "Development", "Coding", "Collaboration"],
+    "date": "2023-05-05"
   },
   {
     "id": 67,
     "url": "https://www.ai.googleblog.com/",
     "site": "Google AI Blog — AI & Machine Learning Research",
     "description": "Official blog from Google AI, covering the latest advancements in artificial intelligence and machine learning.",
-    "tags": ["AI", "Machine Learning", "Google", "Research", "Technology"]
+    "tags": ["AI", "Machine Learning", "Google", "Research", "Technology"],
+    "date": "2023-07-12"
   },
   {
     "id": 68,
     "url": "https://www.unsplash.com/",
     "site": "Unsplash — Free High-Quality Images",
     "description": "A collection of high-resolution, royalty-free images for personal and commercial use.",
-    "tags": ["Photography", "Stock Images", "Creativity", "Design Resources", "Free Assets"]
+    "tags": ["Photography", "Stock Images", "Creativity", "Design Resources", "Free Assets"],
+    "date": "2023-09-25"
   },
   {
     "id": 69,
     "url": "https://www.monkeytype.com/",
     "site": "Monkeytype — Typing Speed & Accuracy Test",
     "description": "An advanced typing test tool that helps users improve their speed and accuracy.",
-    "tags": ["Typing", "Productivity", "Practice", "Tools", "Efficiency"]
+    "tags": ["Typing", "Productivity", "Practice", "Tools", "Efficiency"],
+    "date": "2023-11-15"
   },
   {
     "id": 70,
     "url": "https://www.namecheap.com/",
     "site": "Namecheap — Domain Name & Hosting Provider",
     "description": "A popular domain registrar and web hosting provider offering affordable services.",
-    "tags": ["Domains", "Hosting", "Web Development", "Online Business", "Entrepreneurship"]
+    "tags": ["Domains", "Hosting", "Web Development", "Online Business", "Entrepreneurship"],
+    "date": "2023-01-22"
   },
   {
     "id": 71,
     "url": "https://www.10minutemail.com/",
     "site": "10 Minute Mail — Temporary Email Service",
     "description": "A disposable email service that provides a temporary email address for online registrations.",
-    "tags": ["Privacy", "Security", "Email", "Tools", "Online Protection"]
+    "tags": ["Privacy", "Security", "Email", "Tools", "Online Protection"],
+    "date": "2023-03-25"
   },
   {
     "id": 72,
     "url": "https://www.waniKani.com/",
     "site": "WaniKani — Learn Kanji & Japanese Vocabulary",
     "description": "A language learning platform designed to help users master Japanese kanji and vocabulary.",
-    "tags": ["Language Learning", "Japanese", "Education", "Kanji", "Vocabulary"]
+    "tags": ["Language Learning", "Japanese", "Education", "Kanji", "Vocabulary"],
+    "date": "2023-05-08"
   },
   {
     "id": 73,
     "url": "https://www.canva.com/",
     "site": "Canva — Online Graphic Design Tool",
     "description": "A user-friendly design tool for creating social media graphics, presentations, and marketing materials.",
-    "tags": ["Graphic Design", "Marketing", "Creativity", "Templates", "Branding"]
+    "tags": ["Graphic Design", "Marketing", "Creativity", "Templates", "Branding"],
+    "date": "2023-07-30"
   },
   {
     "id": 74,
     "url": "https://www.grafana.com/",
     "site": "Grafana — Open Source Data Visualization",
     "description": "A leading open-source analytics and monitoring tool for visualizing and analyzing data.",
-    "tags": ["Data Analytics", "Monitoring", "Visualization", "Open Source", "Dashboards"]
+    "tags": ["Data Analytics", "Monitoring", "Visualization", "Open Source", "Dashboards"],
+    "date": "2023-09-07"
   },
   {
     "id": 75,
     "url": "https://www.framer.com/motion/",
     "site": "Framer Motion — React Animation Library",
     "description": "A high-performance motion library for animating React applications with smooth interactions.",
-    "tags": ["Animation", "React", "Development", "Front-end", "UI/UX"]
+    "tags": ["Animation", "React", "Development", "Front-end", "UI/UX"],
+    "date": "2023-11-25"
   },
   {
     "id": 76,
     "url": "https://www.medium.com/",
     "site": "Medium — Read, Write, and Share Stories",
     "description": "An open platform where readers and writers share their perspectives on various topics, including tech, business, and self-improvement.",
-    "tags": ["Writing", "Blogging", "Tech", "Business", "Education"]
+    "tags": ["Writing", "Blogging", "Tech", "Business", "Education"],
+    "date": "2023-01-10"
   },
   {
     "id": 77,
     "url": "https://www.stackoverflow.com/",
     "site": "Stack Overflow — Developer Q&A Community",
     "description": "A popular Q&A site where developers ask and answer coding-related questions, covering programming languages, frameworks, and best practices.",
-    "tags": ["Programming", "Development", "Q&A", "Software Engineering", "Coding"]
+    "tags": ["Programming", "Development", "Q&A", "Software Engineering", "Coding"],
+    "date": "2023-03-20"
   },
   {
     "id": 78,
     "url": "https://www.producthunt.com/",
     "site": "Product Hunt — Discover the Best New Products",
     "description": "A community-driven platform that showcases and ranks new tech products, startups, and innovations.",
-    "tags": ["Startups", "Tech", "Innovation", "Product Discovery", "Entrepreneurship"]
+    "tags": ["Startups", "Tech", "Innovation", "Product Discovery", "Entrepreneurship"],
+    "date": "2023-05-02"
   },
   {
     "id": 79,
     "url": "https://www.khanacademy.org/",
     "site": "Khan Academy — Free Online Courses",
     "description": "A non-profit educational platform offering free courses in math, science, economics, and more.",
-    "tags": ["Education", "Learning", "Math", "Science", "Online Courses"]
+    "tags": ["Education", "Learning", "Math", "Science", "Online Courses"],
+    "date": "2023-07-27"
   },
   {
     "id": 80,
     "url": "https://www.github.com/trending",
     "site": "GitHub Trending — Popular Repositories",
     "description": "A section on GitHub showcasing trending repositories across various programming languages and technologies.",
-    "tags": ["Development", "Open Source", "GitHub", "Coding", "Software"]
+    "tags": ["Development", "Open Source", "GitHub", "Coding", "Software"],
+    "date": "2023-09-12"
   },
   {
     "id": 81,
     "url": "https://www.hackernoon.com/",
     "site": "Hacker Noon — Tech & Startup Stories",
     "description": "A publication covering software development, blockchain, AI, and startup culture.",
-    "tags": ["Technology", "Startups", "Software Development", "AI", "Blockchain"]
+    "tags": ["Technology", "Startups", "Software Development", "AI", "Blockchain"],
+    "date": "2023-11-30"
   },
   {
     "id": 82,
     "url": "https://www.ted.com/talks",
     "site": "TED Talks — Inspiring & Educational Talks",
     "description": "A vast collection of talks from experts across various fields, covering innovation, psychology, and leadership.",
-    "tags": ["Inspiration", "Education", "Leadership", "Technology", "Ideas"]
+    "tags": ["Inspiration", "Education", "Leadership", "Technology", "Ideas"],
+    "date": "2023-01-15"
   },
   {
     "id": 83,
     "url": "https://www.ycombinator.com/",
     "site": "Y Combinator — Startup Accelerator",
     "description": "A world-renowned startup accelerator that provides seed funding and mentorship for innovative startups.",
-    "tags": ["Startups", "Funding", "Entrepreneurship", "Tech", "Innovation"]
+    "tags": ["Startups", "Funding", "Entrepreneurship", "Tech", "Innovation"],
+    "date": "2023-03-27"
   },
   {
     "id": 84,
     "url": "https://www.behance.net/",
     "site": "Behance — Showcase Creative Work",
     "description": "A platform where designers, artists, and creatives showcase their portfolios and get discovered.",
-    "tags": ["Design", "Creativity", "Portfolios", "Graphic Design", "Inspiration"]
+    "tags": ["Design", "Creativity", "Portfolios", "Graphic Design", "Inspiration"],
+    "date": "2023-05-17"
   },
   {
     "id": 85,
     "url": "https://www.freecodecamp.org/",
     "site": "freeCodeCamp — Learn to Code for Free",
     "description": "A nonprofit organization that provides free coding courses and hands-on projects in web development, data science, and more.",
-    "tags": ["Coding", "Programming", "Education", "Web Development", "Software"]
+    "tags": ["Coding", "Programming", "Education", "Web Development", "Software"],
+    "date": "2023-07-03"
   },
   {
     "id": 86,
     "url": "https://www.siteinspire.com/",
     "site": "SiteInspire — Web Design Inspiration",
     "description": "A curated showcase of the best web design projects, offering inspiration for designers and developers.",
-    "tags": ["Web Design", "Inspiration", "UI/UX", "Creativity", "Design"]
+    "tags": ["Web Design", "Inspiration", "UI/UX", "Creativity", "Design"],
+    "date": "2023-09-18"
   },
   {
     "id": 87,
     "url": "https://www.nomadlist.com/",
     "site": "Nomad List — Best Places for Remote Work",
     "description": "A resource for digital nomads, ranking cities based on cost of living, internet speed, and quality of life.",
-    "tags": ["Remote Work", "Travel", "Digital Nomads", "Work-Life Balance", "Entrepreneurship"]
+    "tags": ["Remote Work", "Travel", "Digital Nomads", "Work-Life Balance", "Entrepreneurship"],
+    "date": "2023-11-07"
   },
   {
     "id": 88,
     "url": "https://www.trello.com/",
     "site": "Trello — Task & Project Management",
     "description": "A visual project management tool that helps teams collaborate and track progress efficiently.",
-    "tags": ["Productivity", "Task Management", "Collaboration", "Organization", "Work"]
+    "tags": ["Productivity", "Task Management", "Collaboration", "Organization", "Work"],
+    "date": "2023-01-27"
   },
   {
     "id": 89,
     "url": "https://www.howtogeek.com/",
     "site": "How-To Geek — Tech Tips & Tutorials",
     "description": "A website that provides in-depth guides, tutorials, and tips on technology, software, and gadgets.",
-    "tags": ["Tech", "Tutorials", "Guides", "Software", "Computers"]
+    "tags": ["Tech", "Tutorials", "Guides", "Software", "Computers"],
+    "date": "2023-03-05"
   },
   {
     "id": 90,
     "url": "https://www.zapier.com/",
     "site": "Zapier — Automate Your Workflows",
     "description": "A no-code automation tool that connects apps and automates repetitive tasks.",
-    "tags": ["Automation", "No-Code", "Productivity", "Workflows", "Efficiency"]
+    "tags": ["Automation", "No-Code", "Productivity", "Workflows", "Efficiency"],
+    "date": "2023-05-25"
   }
 ]

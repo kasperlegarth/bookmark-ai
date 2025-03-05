@@ -17,6 +17,10 @@ body {
   scrollbar-color: hsl(var(--border)) transparent;
 }
 
+.user-select-none {
+  user-select: none;
+}
+
 :root {
   interpolate-size: allow-keywords;
 }

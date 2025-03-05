@@ -13,11 +13,17 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
     getBookmarkById: (state) => (id: number) => state.bookmarks.find((bookmark: { id: number; }) => bookmark.id === id),
     totalBookmarks: (state) => state.bookmarks.length,
     allTags: (state) => {
-      const tags = new Set<string>();
+      const tagCounts: { [key: string]: number } = {};
       state.bookmarks.forEach((bookmark: Bookmark) => {
-        bookmark.tags.forEach((tag: string) => tags.add(tag));
+        bookmark.tags.forEach((tag: string) => {
+          if (tagCounts[tag]) {
+            tagCounts[tag]++;
+          } else {
+            tagCounts[tag] = 1;
+          }
+        });
       });
-      return Array.from(tags).sort();
+      return Object.keys(tagCounts).map(tag => ({ label: tag, count: tagCounts[tag] })).sort((a, b) => a.label.localeCompare(b.label));
     }
   },
   actions: {

@@ -3,44 +3,21 @@
 import { Filter } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import {
-  Pagination,
-  PaginationEllipsis,
-  PaginationList,
-  PaginationListItem,
-  PaginationNext,
-  PaginationPrev,
-} from '@/components/ui/pagination'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Separator } from '@/components/ui/separator'
+import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Pagination, PaginationEllipsis, PaginationList, PaginationListItem, PaginationNext, PaginationPrev } from '@/components/ui/pagination'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Toaster } from '@/components/ui/toast';
 import Settings from '@/components/Settings.vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import BookmarkList from '@/components/BookmarkList.vue'
 import BookmarkForm from '@/components/BookmarkForm.vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { Bookmark } from "./types/Bookmark"
+import Badge from "./components/ui/badge/Badge.vue"
 
 // State and Variables
 const bookmarkStore = useBookmarkStore();
@@ -55,13 +32,21 @@ const siteName = ref('');
 const description = ref('');
 const tags = ref<string[]>([]);
 const searchQuery = ref('');
+const filterDialogOpen = ref(false);
+const dialogTagsToShow = ref(25);
+
+watch(filterDialogOpen, (newVal) => {
+  if (!newVal) {
+    dialogTagsToShow.value = 25;
+  }
+});
 
 // Methods
 function addBookmark() {
-  if(step.value === 1) {
+  if (step.value === 1) {
     step.value = 2;
   } else {
-    if(mode.value === 'edit') {
+    if (mode.value === 'edit') {
       bookmarkStore.updateBookmarkById(editId.value, {
         url: url.value,
         site: siteName.value,
@@ -74,7 +59,8 @@ function addBookmark() {
         url: url.value,
         site: siteName.value,
         description: description.value,
-        tags: tags.value, 
+        tags: tags.value,
+        date: new Date().toISOString().split('T')[0],
       });
     }
     step.value = 1;
@@ -94,9 +80,9 @@ function resetForm() {
 }
 
 function editBookmark(bookmarkId: number) {
-  const bookmark = bookmarkStore.getBookmarkById(bookmarkId); 
-  
-  if(!bookmark) {
+  const bookmark = bookmarkStore.getBookmarkById(bookmarkId);
+
+  if (!bookmark) {
     return;
   }
 
@@ -110,15 +96,35 @@ function editBookmark(bookmarkId: number) {
   dialogOpen.value = true;
 }
 
+const pickedTags = ref<string[]>([]);
+
+function toggleTag(tag: string) {
+  if (pickedTags.value.includes(tag)) {
+    pickedTags.value = pickedTags.value.filter(t => t !== tag);
+  } else {
+    pickedTags.value = [...pickedTags.value, tag];
+  }
+}
+
+const taggedBookmarks = computed(() => {
+  if (pickedTags.value.length === 0) {
+    return bookmarkStore.bookmarks;
+  }
+
+  return bookmarkStore.bookmarks.filter((bookmark: Bookmark) => {
+    return bookmark.tags.some(tag => pickedTags.value.includes(tag));
+  });
+});
+
 const searchedBookmarks = computed(() => {
   if (searchQuery.value === '') {
-    return bookmarkStore.bookmarks;
+    return taggedBookmarks.value;
   }
 
   const query = searchQuery.value.toLowerCase();
   const queryWords = query.split(' ');
 
-  return bookmarkStore.bookmarks
+  return taggedBookmarks.value
     .map((bookmark: Bookmark) => {
       let score = 0;
 
@@ -184,43 +190,66 @@ const searchedBookmarks = computed(() => {
         <div class="w-3/4">
           <div className="flex w-full max-w-sm items-center space-x-2">
             <Input type="search" v-model="searchQuery" placeholder="Search for boomark" class="text-sm" />
-            <Button class="text-sm">
-              <Filter />
-              Filter
-            </Button>
+            <Dialog v-model:open="filterDialogOpen">
+              <DialogTrigger>
+                <Button class="text-sm">
+                  <Filter />
+                  Filter
+                </Button>
+              </DialogTrigger>
+              <DialogContent class="sm:max-w-[625px] w-[90vw] grid-rows-[auto_minmax(0,1fr)_auto] px-0 max-h-[90dvh]">
+                <DialogHeader class="px-6">
+                  <DialogTitle>
+                    Filter Bookmarks
+                  </DialogTitle>
+                  <DialogDescription>Narrow you bookmark list by adding filters.</DialogDescription>
+                </DialogHeader>
+                <div class="px-6 py-4 overflow-y-auto max-h-[calc(90vh-5rem)]">  
+                  <h2 class="text-md font-semibold">Tags</h2>
+                  <p class="text-sm text-muted-foreground">Your bookmark should contain atleast one of the picked tags</p>
+                  <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <Badge v-for="tag in bookmarkStore.allTags.slice(0, dialogTagsToShow)" :key="tag.label" @click="toggleTag(tag.label)" :variant="pickedTags.includes(tag.label) ? 'default' : 'outline'" class="cursor-pointer user-select-none">{{ tag.label }}</Badge>
+                    <Separator v-if="dialogTagsToShow <= bookmarkStore.allTags.length" class="my-4 w-full cursor-pointer" label="Show more" @click="dialogTagsToShow += 25" />
+                  </div>
+                </div>
+                <DialogFooter class=" px-6">
+                  <DialogClose as-child>
+                    <Button type="button" variant="outline" @click="pickedTags = []">
+                      Reset
+                    </Button>
+                    <Button type="button" variant="default" @click="filterDialogOpen = false">
+                      See <strong>{{ searchedBookmarks.length }}</strong> bookmarks
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
         <div class="w-1/4 flex justify-end">
-          <BookmarkForm
-            :dialogOpen="dialogOpen"
-            :mode="mode"
-            :step="step"
-            :url="url"
-            :siteName="siteName"
-            :description="description"
-            :tags="tags"
-            :editId="editId"
-            @addBookmark="addBookmark"
-            @resetForm="resetForm"
-          />
+          <BookmarkForm :dialogOpen="dialogOpen" :mode="mode" :step="step" :url="url" :siteName="siteName"
+            :description="description" :tags="tags" :editId="editId" @addBookmark="addBookmark"
+            @resetForm="resetForm" />
         </div>
       </div>
       <div v-if="searchedBookmarks.length > 0" class="flex flex-row mt-6">
-        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="searchedBookmarks" :page="currentPage" :pageSize="pageSize" :searchQuery="searchQuery"
-          @edit="editBookmark" />
+        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="searchedBookmarks" :page="currentPage"
+          :pageSize="pageSize" :searchQuery="searchQuery" @edit="editBookmark" />
       </div>
       <div v-else class="flex flex-col items-center text-center w-full">
         <p class="text-lg text-muted-foreground">No bookmarks found</p>
       </div>
     </CardContent>
     <CardFooter v-if="searchedBookmarks.length > 10">
-      <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges :total="searchedBookmarks.length">
+      <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges
+        :total="searchedBookmarks.length">
         <PaginationList v-slot="{ items }" class="flex item-center gap-1">
           <PaginationPrev @click="currentPage = currentPage - 1" />
 
           <template v-for="(item, index) in items">
             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-              <Button @click="currentPage = item.value" class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'">
+              <Button @click="currentPage = item.value" class="w-10 h-10 p-0"
+                :variant="item.value === page ? 'default' : 'outline'">
                 {{ item.value }}
               </Button>
             </PaginationListItem>
@@ -249,6 +278,7 @@ const searchedBookmarks = computed(() => {
       </div>
     </CardFooter>
   </Card>
+  <Toaster />
 </template>
 
 <style lang="scss">
