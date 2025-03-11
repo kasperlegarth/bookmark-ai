@@ -49,8 +49,7 @@ const tagsOpen = ref(false);
 const newTag = ref('');
 
 const filteredTags = computed(() => {
-  const options = allTags.filter(tag => !localTags.value.includes(tag.label));
-  return newTag.value ? options.filter(tag => tag.label.toLowerCase().includes(newTag.value.toLowerCase())) : options;
+  return newTag.value ? allTags.filter(tag => tag.label.toLowerCase().includes(newTag.value.toLowerCase())) : allTags;
 });
 
 // Watchers
@@ -78,6 +77,50 @@ watch(() => props.tags, (newVal) => {
 watch(() => props.editId, (newVal) => {
   localEditId.value = newVal
 })
+
+function newTagInputUpdate(event: InputEvent) {
+  newTag.value += event.data || '';
+}
+
+function newTagSystemKeys(event: KeyboardEvent) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    if (newTag.value && filteredTags.value.length === 0) {
+      localTags.value.push(capitalizeFirstLetter(newTag.value));
+      tagsOpen.value = false;
+    }
+
+    newTag.value = '';
+  }
+
+  if(event.key === 'Backspace') {
+    if (newTag.value) {
+      newTag.value = newTag.value.slice(0, -1);
+    }
+  }
+
+  if(event.key === 'Escape') {
+    newTag.value = '';
+  }
+
+  if(event.key === 'ArrowDown') {
+    tagsOpen.value = true;
+  }
+
+  if(event.key === 'Tab') {
+    if (newTag.value) {
+      localTags.value.push(capitalizeFirstLetter(newTag.value));
+    }
+
+    newTag.value = '';
+    tagsOpen.value = false;
+  }
+}
+
+function capitalizeFirstLetter(str: string): string {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 // Methods
 async function validateUrl(url: string): Promise<boolean> {
@@ -199,12 +242,13 @@ async function addBookmark() {
                 <FormMessage />
               </FormItem>
             </FormField>
-            <FormField v-slot="{ componentField }" name="tags">
+            <FormField name="tags">
               <FormItem>
                 <FormLabel for="tags">Tags</FormLabel>
                 <FormControl>
                   <Combobox v-model="localTags" v-model:open="tagsOpen" :ignore-filter="true">
                     <ComboboxAnchor as-child>
+
                       <TagsInput v-model="localTags" class="px-2 gap-2 w-full">
                         <div class="flex gap-2 flex-wrap items-center">
                           <TagsInputItem v-for="item in localTags" :key="item" :value="item">
@@ -213,7 +257,7 @@ async function addBookmark() {
                           </TagsInputItem>
                         </div>
 
-                        <ComboboxInput v-model="newTag" as-child v-bind="componentField">
+                        <ComboboxInput @input="newTagInputUpdate" @keyup="newTagSystemKeys" as-child>
                           <TagsInputInput placeholder="Add tags..."
                             class="min-w-[200px] w-full p-0 border-none shadow-none focus-visible:ring-0 h-auto"
                             @keydown.enter.prevent />
