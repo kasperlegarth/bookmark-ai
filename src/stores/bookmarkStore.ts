@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { Bookmark } from '@/types/Bookmark';
 import bookmarksData from '@/data/bookmarks.json';
+import type { Tag } from '@/types/Tag';
 
 export const useBookmarkStore = defineStore('bookmarkStore', {
   state: () => {
@@ -12,18 +13,25 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
   getters: {
     getBookmarkById: (state) => (id: number) => state.bookmarks.find((bookmark: { id: number; }) => bookmark.id === id),
     totalBookmarks: (state) => state.bookmarks.length,
-    allTags: (state) => {
+    allTags: (state): Tag[] => {
       const tagCounts: { [key: string]: number } = {};
       state.bookmarks.forEach((bookmark: Bookmark) => {
-        bookmark.tags.forEach((tag: string) => {
-          if (tagCounts[tag]) {
-            tagCounts[tag]++;
+        bookmark.tags.forEach((tag: Tag) => {
+          const tagLabel = typeof tag === 'string' ? tag : tag.label;
+          if (tagCounts[tagLabel]) {
+            tagCounts[tagLabel]++;
           } else {
-            tagCounts[tag] = 1;
+            tagCounts[tagLabel] = 1;
           }
         });
       });
-      return Object.keys(tagCounts).map(tag => ({ label: tag, count: tagCounts[tag] })).sort((a, b) => a.label.localeCompare(b.label));
+      return Object.keys(tagCounts)
+        .map(tag => ({
+          value: tag.toLocaleLowerCase().replace(' ', '-'),
+          label: tag,
+          count: tagCounts[tag],
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     }
   },
   actions: {

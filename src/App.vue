@@ -4,11 +4,13 @@ import { Filter } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from '@/components/ui/separator'
+import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Pagination, PaginationEllipsis, PaginationList, PaginationListItem, PaginationNext, PaginationPrev } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox'
 import { Toaster } from '@/components/ui/toast';
 import Settings from '@/components/Settings.vue'
 import ThemeToggle from '@/components/ThemeToggle.vue'
@@ -17,10 +19,11 @@ import BookmarkForm from '@/components/BookmarkForm.vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore';
 import { computed, ref, watch } from 'vue';
 import type { Bookmark } from "./types/Bookmark"
-import Badge from "./components/ui/badge/Badge.vue"
+import type { Tag } from "./types/Tag"
 
 // State and Variables
 const bookmarkStore = useBookmarkStore();
+const allTags = bookmarkStore.allTags
 const pageSize = ref(10);
 const currentPage = ref(1);
 const step = ref(1);
@@ -30,7 +33,7 @@ const editId = ref(0);
 const url = ref('');
 const siteName = ref('');
 const description = ref('');
-const tags = ref<string[]>([]);
+const tags = ref<Tag[]>([]);
 const searchQuery = ref('');
 const filterDialogOpen = ref(false);
 const dialogTagsToShow = ref(25);
@@ -51,7 +54,7 @@ function addBookmark() {
         url: url.value,
         site: siteName.value,
         description: description.value,
-        tags: tags.value,
+        tags: tags.value.map(tag => ({ value: tag.value.toLowerCase().replace(' ', '-'), label: tag.label, count: 0 })),
       });
     } else {
       bookmarkStore.addBookmark({
@@ -59,7 +62,7 @@ function addBookmark() {
         url: url.value,
         site: siteName.value,
         description: description.value,
-        tags: tags.value,
+        tags: tags.value.map(tag => ({ value: tag.value.toLowerCase().replace(' ', '-'), label: tag.label, count: 0 })),
         date: new Date().toISOString().split('T')[0],
       });
     }
@@ -91,20 +94,32 @@ function editBookmark(bookmarkId: number) {
   url.value = bookmark.url;
   siteName.value = bookmark.site;
   description.value = bookmark.description;
-  tags.value = bookmark.tags.join(', ');
+  tags.value = bookmark.tags;
   step.value = 2;
   dialogOpen.value = true;
 }
 
-const pickedTags = ref<string[]>([]);
-
-function toggleTag(tag: string) {
-  if (pickedTags.value.includes(tag)) {
-    pickedTags.value = pickedTags.value.filter(t => t !== tag);
-  } else {
-    pickedTags.value = [...pickedTags.value, tag];
-  }
+/**
+ * Creates a new tag object from a given string.
+ * @param tagLabel - The label for the new tag.
+ * @returns A new tag object.
+ */
+ function createTag(tagLabel: string): Tag {
+  return {
+    label: tagLabel,
+    value: tagLabel.toLowerCase().replace(/\s+/g, '-'),
+    count: 0, // Initialize the count property
+  };
 }
+
+function removeTag(tag: Tag) {
+  pickedTags.value = pickedTags.value.filter(pickedTag => pickedTag.value !== tag.value);
+}
+
+const pickedTags = ref<Tag[]>([]);
+const filteredTags = computed(() => {
+  return allTags.filter(tag => !pickedTags.value.includes(tag));
+});
 
 const taggedBookmarks = computed(() => {
   if (pickedTags.value.length === 0) {
@@ -112,7 +127,17 @@ const taggedBookmarks = computed(() => {
   }
 
   return bookmarkStore.bookmarks.filter((bookmark: Bookmark) => {
-    return bookmark.tags.some(tag => pickedTags.value.includes(tag));
+    return bookmark.tags.some(tag => {
+      if(typeof tag === 'string') {
+        return pickedTags.value.some(pickedTag => {
+          return tag === pickedTag.label;
+        });
+      }
+
+      return pickedTags.value.some(pickedTag => {
+        return tag.value === pickedTag.value;
+      });
+    });
   });
 });
 
@@ -204,12 +229,41 @@ const searchedBookmarks = computed(() => {
                   </DialogTitle>
                   <DialogDescription>Narrow you bookmark list by adding filters.</DialogDescription>
                 </DialogHeader>
-                <div class="px-6 py-4 overflow-y-auto max-h-[calc(90vh-5rem)]">  
+                <div class="px-6 py-4 overflow-y-auto max-h-[calc(90vh-5rem)]">
                   <h2 class="text-md font-semibold">Tags</h2>
-                  <p class="text-sm text-muted-foreground">Your bookmark should contain atleast one of the picked tags</p>
+                  <p class="text-sm text-muted-foreground">Your bookmark should contain atleast one of the picked tags
+                  </p>
                   <div class="flex flex-wrap items-center gap-2 mt-2">
-                    <Badge v-for="tag in bookmarkStore.allTags.slice(0, dialogTagsToShow)" :key="tag.label" @click="toggleTag(tag.label)" :variant="pickedTags.includes(tag.label) ? 'default' : 'outline'" class="cursor-pointer user-select-none">{{ tag.label }}</Badge>
-                    <Separator v-if="dialogTagsToShow <= bookmarkStore.allTags.length" class="my-4 w-full cursor-pointer" label="Show more" @click="dialogTagsToShow += 25" />
+                    <Combobox by="label" v-model="pickedTags" multiple>
+                      <ComboboxAnchor>
+                        <div class="relative w-full max-w-sm items-center">
+                          <ComboboxInput :display-value="(val) => val?.label ?? ''"
+                            placeholder="Select tags..." />
+                        </div>
+                      </ComboboxAnchor>
+
+                      <ComboboxList>
+                        <ComboboxEmpty>
+                          No tags found.
+                        </ComboboxEmpty>
+
+                        <ComboboxGroup>
+                          <ComboboxItem v-for="tag in filteredTags" :key="tag.value" :value="tag.label"
+                          @select.prevent="(ev) => {
+                              if (typeof ev.detail.value === 'string') {
+                                const tag = createTag(ev.detail.value);
+                                pickedTags.push(tag)
+                              }
+                            }">
+                            {{ tag.label }}
+                          </ComboboxItem>
+                        </ComboboxGroup>
+                      </ComboboxList>
+                    </Combobox>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <Badge v-for="tag in pickedTags.slice(0, dialogTagsToShow)" :key="tag.value" @click="removeTag(tag)" variant="outline" class="cursor-pointer user-select-none">{{ tag.label }}</Badge>
+                    <Separator v-if="dialogTagsToShow <= pickedTags.length" class="my-4 w-full cursor-pointer" label="Show more" @click="dialogTagsToShow += 25" />
                   </div>
                 </div>
                 <DialogFooter class=" px-6">

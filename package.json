@@ -16,7 +16,7 @@
     "lucide-vue-next": "^0.475.0",
     "openai": "^4.86.2",
     "pinia": "^3.0.1",
-    "reka-ui": "^2.0.2",
+    "reka-ui": "^2.1.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "vee-validate": "^4.15.0",

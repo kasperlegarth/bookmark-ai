@@ -1,5 +1,7 @@
 <script setup lang="ts">
 // Imports
+import type { Tag } from '@/types/Tag';
+
 import { BookmarkPlus, Check } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,12 +11,11 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox'
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { useToast } from '@/components/ui/toast/use-toast'
-
-const { toast } = useToast()
-
 import { computed, ref, watch } from 'vue'
 import { useBookmarkStore } from '@/stores/bookmarkStore'
 
+// Toast utility
+const { toast } = useToast()
 
 // Props
 const props = defineProps<{
@@ -24,7 +25,7 @@ const props = defineProps<{
   url: string,
   siteName: string,
   description: string,
-  tags: string[],
+  tags: Tag[],
   editId: number,
   onAddBookmark: () => void,
   onResetForm: () => void
@@ -32,161 +33,146 @@ const props = defineProps<{
 
 // State and Variables
 const bookmarkStore = useBookmarkStore()
-const localDialogOpen = ref(props.dialogOpen)
-const localStep = ref(props.step)
-const localMode = ref(props.mode)
-const localUrl = ref(props.url)
-const localSiteName = ref(props.siteName)
-const localDescription = ref(props.description)
-const localTags = ref<string[]>(props.tags)
-const localEditId = ref(props.editId)
+const dialogOpen = ref(props.dialogOpen)
+const step = ref(props.step)
+const mode = ref(props.mode)
+const url = ref(props.url)
+const siteName = ref(props.siteName)
+const description = ref(props.description)
+const tags = ref<Tag[]>(props.tags)
+const editId = ref(props.editId)
 const isValidUrl = ref(false)
 const isFetching = ref(false)
-const allTags = bookmarkStore.allTags;
-let urlValidationTimeout: ReturnType<typeof setTimeout> | null = null;
+const allTags = bookmarkStore.allTags
+let urlValidationTimeout: ReturnType<typeof setTimeout> | null = null
 
-const tagsOpen = ref(false);
-const newTag = ref('');
+// Tag-related state
+const tagsOpen = ref(false)
+const newTag = ref('')
 
+// Computed property for filtering tags
 const filteredTags = computed(() => {
-  return newTag.value ? allTags.filter(tag => tag.label.toLowerCase().includes(newTag.value.toLowerCase())) : allTags;
-});
+  return newTag.value ? allTags.filter(tag => tag.label.toLowerCase().includes(newTag.value.toLowerCase())) : allTags
+})
 
-// Watchers
+// Watchers to sync props with local state
 watch(() => props.dialogOpen, (newVal) => {
-  localDialogOpen.value = newVal
+  dialogOpen.value = newVal
 })
 watch(() => props.step, (newVal) => {
-  localStep.value = newVal
+  step.value = newVal
 })
 watch(() => props.mode, (newVal) => {
-  localMode.value = newVal
+  mode.value = newVal
 })
 watch(() => props.url, (newVal) => {
-  localUrl.value = newVal
+  url.value = newVal
 })
 watch(() => props.siteName, (newVal) => {
-  localSiteName.value = newVal
+  siteName.value = newVal
 })
 watch(() => props.description, (newVal) => {
-  localDescription.value = newVal
+  description.value = newVal
 })
 watch(() => props.tags, (newVal) => {
-  localTags.value = newVal
+  tags.value = newVal
 })
 watch(() => props.editId, (newVal) => {
-  localEditId.value = newVal
+  editId.value = newVal
 })
 
-function newTagInputUpdate(event: InputEvent) {
-  newTag.value += event.data || '';
-}
-
-function newTagSystemKeys(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    if (newTag.value && filteredTags.value.length === 0) {
-      localTags.value.push(capitalizeFirstLetter(newTag.value));
-      tagsOpen.value = false;
-    }
-
-    newTag.value = '';
-  }
-
-  if(event.key === 'Backspace') {
-    if (newTag.value) {
-      newTag.value = newTag.value.slice(0, -1);
-    }
-  }
-
-  if(event.key === 'Escape') {
-    newTag.value = '';
-  }
-
-  if(event.key === 'ArrowDown') {
-    tagsOpen.value = true;
-  }
-
-  if(event.key === 'Tab') {
-    if (newTag.value) {
-      localTags.value.push(capitalizeFirstLetter(newTag.value));
-    }
-
-    newTag.value = '';
-    tagsOpen.value = false;
-  }
-}
-
-function capitalizeFirstLetter(str: string): string {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 // Methods
+
+/**
+ * Validates the given URL by attempting to fetch it.
+ * @param url - The URL to validate.
+ * @returns A promise that resolves to a boolean indicating validity.
+ */
 async function validateUrl(url: string): Promise<boolean> {
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'https://' + url;
+    url = 'https://' + url
   }
-  isFetching.value = true;
+  isFetching.value = true
   try {
-    const response = await fetch(url, { mode: 'no-cors' });
-    isValidUrl.value = true;
-    return response.ok;
+    const response = await fetch(url, { mode: 'no-cors' })
+    isValidUrl.value = true
+    return response.ok
   } catch (error) {
-    console.log('error', error);
-    isValidUrl.value = false;
+    console.log('error', error)
+    isValidUrl.value = false
     toast({
       title: 'Invalid URL',
       description: 'It looks like the URL you entered is invalid. Please enter a valid URL.',
       variant: 'destructive',
-    });
-    return false;
+    })
+    return false
   } finally {
-    isFetching.value = false;
+    isFetching.value = false
   }
 }
 
-function handleUrlInput(url: string) {
+/**
+ * Handles URL input changes and triggers validation after a delay.
+ * @param inputUrl - The URL input value.
+ */
+function handleUrlInput(inputUrl: string) {
   if (urlValidationTimeout) {
-    clearTimeout(urlValidationTimeout);
+    clearTimeout(urlValidationTimeout)
   }
   urlValidationTimeout = setTimeout(() => {
-    validateUrl(url);
-  }, 500);
+    validateUrl(inputUrl)
+  }, 500)
 }
 
+/**
+ * Adds or updates a bookmark based on the current mode.
+ */
 async function addBookmark() {
-  if (localStep.value === 1) {
-    localStep.value = 2;
+  if (step.value === 1) {
+    step.value = 2
   } else {
-    if (localMode.value === 'edit') {
-      bookmarkStore.updateBookmarkById(localEditId.value, {
-        url: localUrl.value,
-        site: localSiteName.value,
-        description: localDescription.value,
-        tags: localTags.value,
+    if (mode.value === 'edit') {
+      bookmarkStore.updateBookmarkById(editId.value, {
+        url: url.value,
+        site: siteName.value,
+        description: description.value,
+        tags: tags.value,
       })
     } else {
       bookmarkStore.addBookmark({
         id: bookmarkStore.bookmarks.length ? Math.max(...bookmarkStore.bookmarks.map((b: { id: number }) => b.id)) + 1 : 1,
-        url: localUrl.value,
-        site: localSiteName.value,
-        description: localDescription.value,
-        tags: localTags.value,
+        url: url.value,
+        site: siteName.value,
+        description: description.value,
+        tags: tags.value,
         date: new Date().toISOString().split('T')[0]
       })
     }
-    localStep.value = 1
-    localDialogOpen.value = false
+    step.value = 1
+    dialogOpen.value = false
   }
 
   props.onResetForm()
 }
+
+/**
+ * Creates a new tag object from a given string.
+ * @param tagLabel - The label for the new tag.
+ * @returns A new tag object.
+ */
+function createTag(tagLabel: string): Tag {
+  return {
+    label: tagLabel,
+    value: tagLabel.toLowerCase().replace(/\s+/g, '-'),
+    count: 0, // Initialize the count property
+  };
+}
 </script>
 
 <template>
+  <!-- Form and Dialog structure -->
   <Form v-slot="{ handleSubmit }" as="">
-    <Dialog v-model:open="localDialogOpen">
+    <Dialog v-model:open="dialogOpen">
       <DialogTrigger>
         <Button>
           Add Bookmark
@@ -195,86 +181,86 @@ async function addBookmark() {
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] px-0 max-h-[90dvh]">
         <DialogHeader class="px-6">
-          <DialogTitle><span v-if="localMode == 'add'">Add</span><span v-if="localMode == 'edit'">Update</span> Bookmark
+          <DialogTitle>
+            <span v-if="mode == 'add'">Add</span>
+            <span v-if="mode == 'edit'">Update</span> Bookmark
           </DialogTitle>
           <DialogDescription>Fill in the details to add a new bookmark</DialogDescription>
         </DialogHeader>
         <form id="addForm" @submit="handleSubmit($event, addBookmark)" class="grid gap-4 py-4 px-6 overflow-y-auto">
+          <!-- URL Input -->
           <FormField v-slot="{ componentField }" name="url">
             <FormItem class="relative">
               <FormLabel for="url">Site URL</FormLabel>
               <FormControl>
-                <Input id="url" type="text" :defaultValue="localUrl" v-model="localUrl"
-                  @input="handleUrlInput(localUrl)" placeholder="https://example.com" v-bind="componentField" />
+                <Input id="url" type="text" :defaultValue="url" v-model="url"
+                  @input="handleUrlInput(url)" placeholder="https://example.com" v-bind="componentField" />
                 <span v-if="isFetching" class="spinner"></span>
                 <Check class="url-check" v-if="!isFetching && isValidUrl" />
               </FormControl>
-              <FormDescription>
-                Input the url you want to bookmark
-              </FormDescription>
+              <FormDescription>Input the URL you want to bookmark</FormDescription>
               <FormMessage />
             </FormItem>
           </FormField>
-          <div class="expand-reveal space-y-4" :class="{ expanded: localStep === 2 }">
+
+          <!-- Additional Fields -->
+          <div class="expand-reveal space-y-4" :class="{ expanded: step === 2 }">
+            <!-- Site Name -->
             <FormField v-slot="{ componentField }" name="siteName">
               <FormItem>
                 <FormLabel for="site">Site Name</FormLabel>
                 <FormControl>
-                  <Input id="site" type="text" :defaultValue="localSiteName" v-model="localSiteName"
+                  <Input id="site" type="text" :defaultValue="siteName" v-model="siteName"
                     placeholder="Site Name" v-bind="componentField" />
                 </FormControl>
-                <FormDescription>
-                  Input a name that helps you remember the site
-                </FormDescription>
+                <FormDescription>Input a name that helps you remember the site</FormDescription>
                 <FormMessage />
               </FormItem>
             </FormField>
+
+            <!-- Description -->
             <FormField v-slot="{ componentField }" name="description">
               <FormItem>
                 <FormLabel for="description">Description</FormLabel>
                 <FormControl>
-                  <Textarea id="description" type="text" :defaultValue="localDescription" v-model="localDescription"
+                  <Textarea id="description" type="text" :defaultValue="description" v-model="description"
                     placeholder="Description" v-bind="componentField" />
                 </FormControl>
-                <FormDescription>
-                  Input a description for the site
-                </FormDescription>
+                <FormDescription>Input a description for the site</FormDescription>
                 <FormMessage />
               </FormItem>
             </FormField>
+
+            <!-- Tags -->
             <FormField name="tags">
               <FormItem>
                 <FormLabel for="tags">Tags</FormLabel>
                 <FormControl>
-                  <Combobox v-model="localTags" v-model:open="tagsOpen" :ignore-filter="true">
+                  <Combobox v-model="tags" v-model:open="tagsOpen">
                     <ComboboxAnchor as-child>
-
-                      <TagsInput v-model="localTags" class="px-2 gap-2 w-full">
+                      <TagsInput v-model="tags" class="px-2 gap-2 w-full">
                         <div class="flex gap-2 flex-wrap items-center">
-                          <TagsInputItem v-for="item in localTags" :key="item" :value="item">
+                          <TagsInputItem v-for="item in tags" :key="item.value" :value="item.label">
                             <TagsInputItemText />
                             <TagsInputItemDelete />
                           </TagsInputItem>
                         </div>
-
-                        <ComboboxInput @input="newTagInputUpdate" @keyup="newTagSystemKeys" as-child>
+                        <ComboboxInput v-model="newTag" as-child>
                           <TagsInputInput placeholder="Add tags..."
                             class="min-w-[200px] w-full p-0 border-none shadow-none focus-visible:ring-0 h-auto"
-                            @keydown.enter.prevent />
+                            @keydown.enter.prevent="newTag = ''; tagsOpen = false;" @keydown.tab.prevent="tags.push(createTag(newTag)); newTag = ''; tagsOpen = false;" />
                         </ComboboxInput>
                       </TagsInput>
-
                       <ComboboxList class="w-[--reka-popper-anchor-width] max-h-[300px] overflow-y-auto">
                         <ComboboxEmpty />
                         <ComboboxGroup>
-                          <ComboboxItem v-for="tag in filteredTags" :key="tag.label"
-                            :value="tag" @select.prevent="(ev) => {
-
+                          <ComboboxItem v-for="tag in filteredTags" :key="tag.value"
+                            :value="tag.label" @select.prevent="(ev) => {
                               if (typeof ev.detail.value === 'string') {
+                                const tag = createTag(ev.detail.value);
                                 newTag = ''
-                                localTags.push(ev.detail.value)
+                                tags.push(tag)
                               }
-
                               if (filteredTags.length === 0) {
                                 tagsOpen = false
                               }
@@ -286,24 +272,22 @@ async function addBookmark() {
                     </ComboboxAnchor>
                   </Combobox>
                 </FormControl>
-                <FormDescription>
-                  Input tags to help you categorize the site
-                </FormDescription>
+                <FormDescription>Input tags to help you categorize the site</FormDescription>
                 <FormMessage />
               </FormItem>
             </FormField>
           </div>
         </form>
-        <DialogFooter class=" px-6">
+        <DialogFooter class="px-6">
           <DialogClose as-child>
-            <Button type="button" @click="props.onResetForm" variant="outline">
-              Cancel
-            </Button>
+            <Button type="button" @click="props.onResetForm" variant="outline">Cancel</Button>
           </DialogClose>
           <Button type="submit" form="addForm" :disabled="!isValidUrl || isFetching">
-            <template v-if="localStep === 1">Next</template>
-            <template v-if="localStep === 2"><span v-if="localMode == 'add'">Add</span><span
-                v-if="localMode == 'edit'">Update</span> Bookmark</template>
+            <template v-if="step === 1">Next</template>
+            <template v-if="step === 2">
+              <span v-if="mode == 'add'">Add</span>
+              <span v-if="mode == 'edit'">Update</span> Bookmark
+            </template>
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -312,6 +296,7 @@ async function addBookmark() {
 </template>
 
 <style lang="scss">
+/* Expandable section styling */
 .expand-reveal {
   height: 0;
   overflow: hidden;
@@ -323,6 +308,7 @@ async function addBookmark() {
   }
 }
 
+/* Spinner styling */
 .spinner {
   position: absolute;
   top: 50%;
@@ -337,6 +323,7 @@ async function addBookmark() {
   animation: spin 1s linear infinite;
 }
 
+/* URL check icon styling */
 .url-check {
   position: absolute;
   top: 50%;
@@ -344,6 +331,7 @@ async function addBookmark() {
   transform: translateY(-70%);
 }
 
+/* Spinner animation */
 @keyframes spin {
   to {
     transform: translateY(-75%) rotate(360deg);
