@@ -50,10 +50,16 @@ function highlightText(text: string): string {
         </thead>
         <tbody>
             <tr v-for="row in paginatedRows" :key="row.id">
-                <td class="border-t px-4 py-2 max-w-xs"><a :href="row.url" target="_blank" v-html="highlightText(row.site)"></a></td>
+                <td class="border-t px-4 py-2 max-w-xs text-sm">
+                    <a :href="row.url" target="_blank" v-html="highlightText(row.site)"></a>
+                    <div class="text-[10px] leading-[1.5] mt-2">
+                        <a :href="row.url" target="_blank" v-html="highlightText(row.url)"></a>
+                        <br>Bookmarked: {{ row.date }}
+                    </div>
+                </td>
                 <td class="border-t px-4 py-2 text-sm max-w-lg" v-html="highlightText(row.description)"></td>
                 <td class="border-t px-4 py-2 max-w-xs">
-                    <Badge v-for="tag in row.tags" :key="tag" variant="outline" class="m-1">{{ tag }}</Badge>
+                    <Badge v-for="tag in row.tags" :key="tag.value" variant="outline" class="m-1">{{ tag.label }}</Badge>
                 </td>
                 <td class="border-t text-right px-4 py-2">
                     <DropdownMenu>

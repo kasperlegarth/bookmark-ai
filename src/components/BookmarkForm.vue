@@ -282,7 +282,7 @@ function createTag(tagLabel: string): Tag {
           <DialogClose as-child>
             <Button type="button" @click="props.onResetForm" variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="addForm" :disabled="!isValidUrl || isFetching">
+          <Button type="submit" form="addForm" :disabled="(!isValidUrl || isFetching) && mode === 'add'">
             <template v-if="step === 1">Next</template>
             <template v-if="step === 2">
               <span v-if="mode == 'add'">Add</span>
