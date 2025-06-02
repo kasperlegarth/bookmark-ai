@@ -174,6 +174,8 @@ function resetForm() {
   tags.value = [];
   step.value = 1;
   mode.value = 'add';
+  dialogOpen.value = false;
+  editId.value = null;
 }
 
 function editBookmark(bookmarkId: number) {
@@ -240,7 +242,7 @@ const searchedBookmarks = computed(() => {
     return taggedBookmarks.value;
   }
 
-  const query = searchQuery.value.toLowerCase();
+  const query = searchQuery.value.toLowerCase().trim();
   const queryWords = query.split(' ');
 
   return taggedBookmarks.value

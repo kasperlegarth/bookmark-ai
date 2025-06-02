@@ -167,6 +167,14 @@ function createTag(tagLabel: string): Tag {
     count: 0, // Initialize the count property
   };
 }
+
+/**
+ * Removes a tag from the tags array.
+ * @param tag - The tag to remove.
+ */
+function removeTag(tag: Tag) {
+  tags.value = tags.value.filter(t => t.value !== tag.value);
+}
 </script>
 
 <template>
@@ -242,7 +250,7 @@ function createTag(tagLabel: string): Tag {
                         <div class="flex gap-2 flex-wrap items-center">
                           <TagsInputItem v-for="item in tags" :key="item.value" :value="item.label">
                             <TagsInputItemText />
-                            <TagsInputItemDelete />
+                            <TagsInputItemDelete @click="removeTag(item)" />
                           </TagsInputItem>
                         </div>
                         <ComboboxInput v-model="newTag" as-child>
