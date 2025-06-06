@@ -175,7 +175,7 @@ function resetForm() {
   step.value = 1;
   mode.value = 'add';
   dialogOpen.value = false;
-  editId.value = null;
+  editId.value = 0;
 }
 
 function editBookmark(bookmarkId: number) {
