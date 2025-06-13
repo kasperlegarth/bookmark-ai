@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { Pagination, PaginationEllipsis, PaginationList, PaginationListItem, PaginationNext, PaginationPrev } from '@/components/ui/pagination'
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationFirst, PaginationItem, PaginationLast, PaginationNext, PaginationPrevious } from '@/components/ui/pagination'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxList } from '@/components/ui/combobox'
 import { Toaster } from '@/components/ui/toast';
@@ -21,6 +21,30 @@ import { type Ref, computed, ref, watch } from 'vue';
 import type { Bookmark } from "./types/Bookmark"
 import type { Tag } from "./types/Tag"
 import { cn } from '@/lib/utils'
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyAFPLVqZ-zGCUOUumRntZxdEc220Bs7XbQ",
+  authDomain: "bookmark-ai-17699.firebaseapp.com",
+  projectId: "bookmark-ai-17699",
+  storageBucket: "bookmark-ai-17699.firebasestorage.app",
+  messagingSenderId: "666744574900",
+  appId: "1:666744574900:web:f95034c7f87b59b56a18e1",
+  measurementId: "G-FK3BVMG3E6"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+console.log(analytics);
 
 import {
   Popover,
@@ -39,7 +63,6 @@ import {
 } from '@/components/ui/range-calendar'
 
 import {
-  CalendarDate,
   type DateValue,
   isEqualMonth,
   today,
@@ -131,6 +154,7 @@ const tags = ref<Tag[]>([]);
 const searchQuery = ref('');
 const filterDialogOpen = ref(false);
 const dialogTagsToShow = ref(10);
+const datePickerOpen = ref(false);
 
 watch(filterDialogOpen, (newVal) => {
   if (!newVal) {
@@ -217,60 +241,72 @@ const filteredTags = computed(() => {
   return allTags.filter(tag => !pickedTags.value.includes(tag));
 });
 
-const taggedBookmarks = computed(() => {
-  if (pickedTags.value.length === 0) {
-    return bookmarkStore.bookmarks;
-  }
-
-  return bookmarkStore.bookmarks.filter((bookmark: Bookmark) => {
-    return bookmark.tags.some(tag => {
-      if (typeof tag === 'string') {
-        return pickedTags.value.some(pickedTag => {
-          return tag === pickedTag.label;
-        });
-      }
-
-      return pickedTags.value.some(pickedTag => {
-        return tag.value === pickedTag.value;
+const filteredBookmarks = computed(() => {
+  // Filter by tags if any are picked
+  let bookmarks = bookmarkStore.bookmarks;
+  if (pickedTags.value.length > 0) {
+    bookmarks = bookmarks.filter((bookmark: Bookmark) => {
+      return bookmark.tags.some(tag => {
+        if (typeof tag === 'string') {
+          return pickedTags.value.some(pickedTag => tag === pickedTag.label);
+        }
+        return pickedTags.value.some(pickedTag => tag.value === pickedTag.value);
       });
     });
-  });
-});
+  }
 
-const searchedBookmarks = computed(() => {
+  // Filter by date range if set
+  const { start, end } = bookmarkDateRange.value;
+  if (start) {
+    // Convert start and end to YYYY-MM-DD strings for comparison
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const startStr = `${start.year}-${pad(start.month)}-${pad(start.day)}`;
+    let endStr = undefined;
+    if (end) {
+      endStr = `${end.year}-${pad(end.month)}-${pad(end.day)}`;
+    }
+    bookmarks = bookmarks.filter((bookmark: Bookmark) => {
+      if (!bookmark.date) return false;
+      if (endStr) {
+        return bookmark.date >= startStr && bookmark.date <= endStr;
+      } else {
+        return bookmark.date >= startStr;
+      }
+    });
+  }
+
+  // Filter by search query if present
   if (searchQuery.value === '') {
-    return taggedBookmarks.value;
+    return bookmarks;
   }
 
   const query = searchQuery.value.toLowerCase().trim();
   const queryWords = query.split(' ');
 
-  return taggedBookmarks.value
+  return bookmarks
     .map((bookmark: Bookmark) => {
       let score = 0;
-
-      // Check for exact match
       if (bookmark.site.toLowerCase().includes(query)) {
         score += 10;
       }
-
       if (bookmark.description.toLowerCase().includes(query)) {
         score += 5;
       }
-
-      // Check for word matches
       queryWords.forEach(word => {
         const siteMatches = bookmark.site.toLowerCase().split(word).length - 1;
         const descriptionMatches = bookmark.description.toLowerCase().split(word).length - 1;
         score += siteMatches * 3;
         score += descriptionMatches * 1;
       });
-
       return { ...bookmark, score };
     })
     .filter((bookmark: { score: number }) => bookmark.score > 0)
     .sort((a: { score: number }, b: { score: number }) => b.score - a.score);
 });
+
+const dateValueUpdate = () => {
+  datePickerOpen.value = false;
+};
 
 </script>
 
@@ -370,9 +406,9 @@ const searchedBookmarks = computed(() => {
                   <p class="text-sm text-muted-foreground">If you have an idea about when you saved your bookmark, you
                     can narrow it down by picking a date range</p>
                   <div class="flex flex-wrap items-center gap-2 mt-2">
-                    <Popover>
+                    <Popover :open="datePickerOpen">
                       <PopoverTrigger as-child>
-                        <Button variant="outline" :class="cn(
+                        <Button @click="datePickerOpen = !datePickerOpen" variant="outline" :class="cn(
                           'w-full justify-start text-left font-normal',
                           !bookmarkDateRange.start && 'text-muted-foreground',
                         )
@@ -407,7 +443,7 @@ const searchedBookmarks = computed(() => {
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent class="w-auto p-0">
-                        <RangeCalendarRoot v-slot="{ weekDays }" v-model="bookmarkDateRange" v-model:placeholder="placeholder"
+                        <RangeCalendarRoot v-slot="{ weekDays }" v-model="bookmarkDateRange" @update:modelValue="dateValueUpdate"
                           class="p-3">
                           <div class="flex flex-col gap-y-4 mt-4 sm:flex-row sm:gap-x-4 sm:gap-y-0">
                             <div class="flex flex-col gap-4">
@@ -511,7 +547,7 @@ weekDates, index
                       Reset
                     </Button>
                     <Button type="button" variant="default" @click="filterDialogOpen = false">
-                      See <strong>{{ searchedBookmarks.length }}</strong> bookmarks
+                      See <strong>{{ filteredBookmarks.length }}</strong> bookmarks
                     </Button>
                   </DialogClose>
                 </DialogFooter>
@@ -525,32 +561,32 @@ weekDates, index
             @resetForm="resetForm" />
         </div>
       </div>
-      <div v-if="searchedBookmarks.length > 0" class="flex flex-row mt-6">
-        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="searchedBookmarks" :page="currentPage"
+      <div v-if="filteredBookmarks.length > 0" class="flex flex-row mt-6">
+        <BookmarkList :headers="['Site', 'Description', 'Tags']" :rows="filteredBookmarks" :page="currentPage"
           :pageSize="pageSize" :searchQuery="searchQuery" @edit="editBookmark" />
       </div>
       <div v-else class="flex flex-col items-center text-center w-full">
         <p class="text-lg text-muted-foreground">No bookmarks found</p>
       </div>
     </CardContent>
-    <CardFooter v-if="searchedBookmarks.length > 10">
+    <CardFooter v-if="filteredBookmarks.length > 10">
       <Pagination v-slot="{ page }" :items-per-page="pageSize" :sibling-count="1" show-edges
-        :total="searchedBookmarks.length">
-        <PaginationList v-slot="{ items }" class="flex item-center gap-1">
-          <PaginationPrev @click="currentPage = currentPage - 1" />
+        :total="filteredBookmarks.length">
+        <PaginationContent v-slot="{ items }" class="flex item-center gap-1">
+          <PaginationPrevious @click="currentPage = currentPage - 1" />
 
           <template v-for="(item, index) in items">
-            <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+            <PaginationItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
               <Button @click="currentPage = item.value" class="w-10 h-10 p-0"
                 :variant="item.value === page ? 'default' : 'outline'">
                 {{ item.value }}
               </Button>
-            </PaginationListItem>
+            </PaginationItem>
             <PaginationEllipsis v-else :key="item.type" :index="index" />
           </template>
 
           <PaginationNext @click="currentPage = currentPage + 1" />
-        </PaginationList>
+        </PaginationContent>
       </Pagination>
       <div class="flex justify-end ml-auto w-48 items-center">
         <div class="text-sm flex-shrink-0 flex-grow-0 mr-4">Items per page:</div>

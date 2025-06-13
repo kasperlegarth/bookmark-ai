@@ -2,7 +2,7 @@
 // Imports
 import type { Tag } from '@/types/Tag';
 
-import { BookmarkPlus, Check } from "lucide-vue-next"
+import { BookmarkPlus, Check, Sparkles } from "lucide-vue-next"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -33,14 +33,14 @@ const props = defineProps<{
 
 // State and Variables
 const bookmarkStore = useBookmarkStore()
-const dialogOpen = ref(props.dialogOpen)
-const step = ref(props.step)
-const mode = ref(props.mode)
-const url = ref(props.url)
-const siteName = ref(props.siteName)
-const description = ref(props.description)
-const tags = ref<Tag[]>(props.tags)
-const editId = ref(props.editId)
+const localDialogOpen = ref(props.dialogOpen)
+const localStep = ref(props.step)
+const localMode = ref(props.mode)
+const localUrl = ref(props.url)
+const localSiteName = ref(props.siteName)
+const localDescription = ref(props.description)
+const localTags = ref<Tag[]>(props.tags)
+const localEditId = ref(props.editId)
 const isValidUrl = ref(false)
 const isFetching = ref(false)
 const allTags = bookmarkStore.allTags
@@ -57,28 +57,28 @@ const filteredTags = computed(() => {
 
 // Watchers to sync props with local state
 watch(() => props.dialogOpen, (newVal) => {
-  dialogOpen.value = newVal
+  localDialogOpen.value = newVal
 })
 watch(() => props.step, (newVal) => {
-  step.value = newVal
+  localStep.value = newVal
 })
 watch(() => props.mode, (newVal) => {
-  mode.value = newVal
+  localMode.value = newVal
 })
 watch(() => props.url, (newVal) => {
-  url.value = newVal
+  localUrl.value = newVal
 })
 watch(() => props.siteName, (newVal) => {
-  siteName.value = newVal
+  localSiteName.value = newVal
 })
 watch(() => props.description, (newVal) => {
-  description.value = newVal
+  localDescription.value = newVal
 })
 watch(() => props.tags, (newVal) => {
-  tags.value = newVal
+  localTags.value = newVal
 })
 watch(() => props.editId, (newVal) => {
-  editId.value = newVal
+  localEditId.value = newVal
 })
 
 // Methods
@@ -128,28 +128,28 @@ function handleUrlInput(inputUrl: string) {
  * Adds or updates a bookmark based on the current mode.
  */
 async function addBookmark() {
-  if (step.value === 1) {
-    step.value = 2
+  if (localStep.value === 1) {
+    localStep.value = 2
   } else {
-    if (mode.value === 'edit') {
-      bookmarkStore.updateBookmarkById(editId.value, {
-        url: url.value,
-        site: siteName.value,
-        description: description.value,
-        tags: tags.value,
+    if (localMode.value === 'edit') {
+      bookmarkStore.updateBookmarkById(localEditId.value, {
+        url: localUrl.value,
+        site: localSiteName.value,
+        description: localDescription.value,
+        tags: localTags.value,
       })
     } else {
       bookmarkStore.addBookmark({
         id: bookmarkStore.bookmarks.length ? Math.max(...bookmarkStore.bookmarks.map((b: { id: number }) => b.id)) + 1 : 1,
-        url: url.value,
-        site: siteName.value,
-        description: description.value,
-        tags: tags.value,
+        url: localUrl.value,
+        site: localSiteName.value,
+        description: localDescription.value,
+        tags: localTags.value,
         date: new Date().toISOString().split('T')[0]
       })
     }
-    step.value = 1
-    dialogOpen.value = false
+    localStep.value = 1
+    localDialogOpen.value = false
   }
 
   props.onResetForm()
@@ -173,14 +173,45 @@ function createTag(tagLabel: string): Tag {
  * @param tag - The tag to remove.
  */
 function removeTag(tag: Tag) {
-  tags.value = tags.value.filter(t => t.value !== tag.value);
+  localTags.value = localTags.value.filter(t => t.value !== tag.value);
+}
+
+// Helper to get the ref from template context
+function getRef(refOrValue: any, refObj: any) {
+  // If passed a ref, return it. If passed a value, return the ref from script.
+  if (typeof refOrValue === 'object' && refOrValue !== null && 'value' in refOrValue) {
+    return refOrValue;
+  }
+  // If passed a string, try to update the local ref directly
+  return refObj;
+}
+
+function tryAPI(refOrValue: any) {
+  // Always get the ref from the helper
+  const refToUpdate = getRef(refOrValue, localDescription);
+  fetch('https://us-central1-bookmark-ai-17699.cloudfunctions.net/helloWorld')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(result => {
+      // Force Vue to update the v-model by replacing the ref value
+      refToUpdate.value = '';
+      setTimeout(() => { refToUpdate.value = result; }, 0);
+      console.log('API Response:', result);
+    })
+    .catch(error => {
+      console.error('API Error:', error);
+    });
 }
 </script>
 
 <template>
   <!-- Form and Dialog structure -->
   <Form v-slot="{ handleSubmit }" as="">
-    <Dialog v-model:open="dialogOpen">
+    <Dialog v-model:open="localDialogOpen">
       <DialogTrigger>
         <Button>
           Add Bookmark
@@ -190,8 +221,8 @@ function removeTag(tag: Tag) {
       <DialogContent class="sm:max-w-[425px] grid-rows-[auto_minmax(0,1fr)_auto] px-0 max-h-[90dvh]">
         <DialogHeader class="px-6">
           <DialogTitle>
-            <span v-if="mode == 'add'">Add</span>
-            <span v-if="mode == 'edit'">Update</span> Bookmark
+            <span v-if="localMode == 'add'">Add</span>
+            <span v-if="localMode == 'edit'">Update</span> Bookmark
           </DialogTitle>
           <DialogDescription>Fill in the details to add a new bookmark</DialogDescription>
         </DialogHeader>
@@ -201,8 +232,8 @@ function removeTag(tag: Tag) {
             <FormItem class="relative">
               <FormLabel for="url">Site URL</FormLabel>
               <FormControl>
-                <Input id="url" type="text" :defaultValue="url" v-model="url"
-                  @input="handleUrlInput(url)" placeholder="https://example.com" v-bind="componentField" />
+                <Input id="url" type="text" :defaultValue="localUrl" v-model="localUrl"
+                  @input="handleUrlInput(localUrl)" placeholder="https://example.com" v-bind="componentField" />
                 <span v-if="isFetching" class="spinner"></span>
                 <Check class="url-check" v-if="!isFetching && isValidUrl" />
               </FormControl>
@@ -212,13 +243,13 @@ function removeTag(tag: Tag) {
           </FormField>
 
           <!-- Additional Fields -->
-          <div class="expand-reveal space-y-4" :class="{ expanded: step === 2 }">
+          <div class="expand-reveal space-y-4" :class="{ expanded: localStep === 2 }">
             <!-- Site Name -->
             <FormField v-slot="{ componentField }" name="siteName">
               <FormItem>
                 <FormLabel for="site">Site Name</FormLabel>
                 <FormControl>
-                  <Input id="site" type="text" :defaultValue="siteName" v-model="siteName"
+                  <Input id="site" type="text" :defaultValue="localSiteName" v-model="localSiteName"
                     placeholder="Site Name" v-bind="componentField" />
                 </FormControl>
                 <FormDescription>Input a name that helps you remember the site</FormDescription>
@@ -227,11 +258,14 @@ function removeTag(tag: Tag) {
             </FormField>
 
             <!-- Description -->
-            <FormField v-slot="{ componentField }" name="description">
+            <FormField v-slot="{ componentField }" v-model="localDescription" name="description">
               <FormItem>
-                <FormLabel for="description">Description</FormLabel>
+                <FormLabel for="description" class="flex justify-between w-full">
+                  Description
+                  <Sparkles @click="() => tryAPI(localDescription)" class="w-4 cursor-pointer" />
+                </FormLabel>
                 <FormControl>
-                  <Textarea id="description" type="text" :defaultValue="description" v-model="description"
+                  <Textarea id="description" type="text" 
                     placeholder="Description" v-bind="componentField" />
                 </FormControl>
                 <FormDescription>Input a description for the site</FormDescription>
@@ -242,13 +276,13 @@ function removeTag(tag: Tag) {
             <!-- Tags -->
             <FormField name="tags">
               <FormItem>
-                <FormLabel for="tags">Tags</FormLabel>
+                <FormLabel for="tags" class="flex justify-between w-full">Tags <Sparkles class="w-4 cursor-pointer" /></FormLabel>
                 <FormControl>
-                  <Combobox v-model="tags" v-model:open="tagsOpen">
+                  <Combobox v-model="localTags" v-model:open="tagsOpen">
                     <ComboboxAnchor as-child>
-                      <TagsInput v-model="tags" class="px-2 gap-2 w-full">
+                      <TagsInput v-model="localTags" class="px-2 gap-2 w-full">
                         <div class="flex gap-2 flex-wrap items-center">
-                          <TagsInputItem v-for="item in tags" :key="item.value" :value="item.label">
+                          <TagsInputItem v-for="item in localTags" :key="item.value" :value="item.label">
                             <TagsInputItemText />
                             <TagsInputItemDelete @click="removeTag(item)" />
                           </TagsInputItem>
@@ -256,7 +290,7 @@ function removeTag(tag: Tag) {
                         <ComboboxInput v-model="newTag" as-child>
                           <TagsInputInput placeholder="Add tags..."
                             class="min-w-[200px] w-full p-0 border-none shadow-none focus-visible:ring-0 h-auto"
-                            @keydown.enter.prevent="newTag = ''; tagsOpen = false;" @keydown.tab.prevent="tags.push(createTag(newTag)); newTag = ''; tagsOpen = false;" />
+                            @keydown.enter.prevent="newTag = ''; tagsOpen = false;" @keydown.tab.prevent="localTags.push(createTag(newTag)); newTag = ''; tagsOpen = false;" />
                         </ComboboxInput>
                       </TagsInput>
                       <ComboboxList class="w-[--reka-popper-anchor-width] max-h-[300px] overflow-y-auto">
@@ -267,7 +301,7 @@ function removeTag(tag: Tag) {
                               if (typeof ev.detail.value === 'string') {
                                 const tag = createTag(ev.detail.value);
                                 newTag = ''
-                                tags.push(tag)
+                                localTags.push(tag)
                               }
                               if (filteredTags.length === 0) {
                                 tagsOpen = false
@@ -290,11 +324,11 @@ function removeTag(tag: Tag) {
           <DialogClose as-child>
             <Button type="button" @click="props.onResetForm" variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" form="addForm" :disabled="(!isValidUrl || isFetching) && mode === 'add'">
-            <template v-if="step === 1">Next</template>
-            <template v-if="step === 2">
-              <span v-if="mode == 'add'">Add</span>
-              <span v-if="mode == 'edit'">Update</span> Bookmark
+          <Button type="submit" form="addForm" :disabled="(!isValidUrl || isFetching) && localMode === 'add'">
+            <template v-if="localStep === 1">Next</template>
+            <template v-if="localStep === 2">
+              <span v-if="localMode == 'add'">Add</span>
+              <span v-if="localMode == 'edit'">Update</span> Bookmark
             </template>
           </Button>
         </DialogFooter>
